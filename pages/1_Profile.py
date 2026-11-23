@@ -7,11 +7,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from datetime import date  # noqa: E402
 
 import pandas as pd  # noqa: E402
+import plotly.graph_objects as go  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from career import db  # noqa: E402
 from career.config import app_config, skill_areas, skill_names  # noqa: E402
 from career.models import Certificate, Event, Project, Student, _to_date  # noqa: E402
+from career.skills import extract, suggest_domain  # noqa: E402
 from career.ui import apply_style  # noqa: E402
 from career.validate import normalize_srn, validate_student  # noqa: E402
 
@@ -106,7 +108,8 @@ def build_student(skills_df, certs_df, projects_df, events_df) -> Student:
         interests=list(ss.f_interests), skills=skills,
         certificates=[Certificate(
             title=_txt(r["title"]), issuer=_txt(r["issuer"]), platform=_txt(r["platform"]) or "Other",
-            domain=_txt(r["domain"]), completion_date=_to_date(r["completion_date"]),
+            domain=_txt(r["domain"]) or suggest_domain(_txt(r["title"])) or "",
+            completion_date=_to_date(r["completion_date"]),
             credential_url=_txt(r["credential_url"])) for r in _rows(certs_df)],
         projects=[Project(
             title=_txt(r["title"]), description=_txt(r["description"]),
@@ -193,6 +196,7 @@ with st.form("profile_form", border=False):
         st.multiselect("Interests", cfg["interests"], key="f_interests")
 
     st.subheader("Certificates")
+    st.caption("Leave **Domain** blank to auto-detect it from the title.")
     certs_df = st.data_editor(
         ss.certs_df, key=f"certs_{ver}", num_rows="dynamic", width="stretch", hide_index=True,
         column_config={
@@ -200,7 +204,9 @@ with st.form("profile_form", border=False):
             "issuer": st.column_config.TextColumn("Issuing organisation"),
             "platform": st.column_config.SelectboxColumn("Platform", options=cfg["certificate_platforms"],
                                                          default="Other"),
-            "domain": st.column_config.SelectboxColumn("Domain", options=skill_areas()),
+            "domain": st.column_config.SelectboxColumn(
+                "Domain", options=skill_areas(),
+                help="Leave blank and it is auto-detected from the title when you save."),
             "completion_date": st.column_config.DateColumn("Completed on", max_value=TODAY,
                                                            format="YYYY-MM-DD"),
             "credential_url": st.column_config.LinkColumn("Credential URL"),
@@ -254,7 +260,38 @@ if submitted:
         flash("success", f"Saved profile {student.srn}.")
     st.rerun()
 
+
+
+def skill_area_section(student: Student) -> None:
+    """Area scores (0-100) with the evidence behind each one."""
+    ex = extract(student)
+    st.subheader("🧭 Skill areas")
+    st.caption("Calculated from your saved profile. Every point is traced back to its source.")
+    order = sorted(ex.scores, key=lambda a: ex.scores[a])
+    fig = go.Figure(go.Bar(
+        x=[ex.scores[a] for a in order], y=[a.replace("_", " ").title() for a in order],
+        orientation="h", marker_color="#4C8DFF",
+        text=[f"{ex.scores[a]:g}" for a in order], textposition="outside",
+        hovertemplate="%{y}: %{x:.0f}/100<extra></extra>"))
+    fig.update_layout(height=360, margin=dict(l=10, r=30, t=10, b=10), xaxis_range=[0, 108],
+                      paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                      font_color="#E8EEF9", xaxis_title="Score (0–100)")
+    c1, c2 = st.columns([3, 2])
+    c1.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
+    with c2:
+        st.markdown("**Evidence**")
+        if not ex.evidence:
+            st.info("No evidence yet — add skills, certificates, projects or events.")
+        for area in sorted(ex.scores, key=lambda a: -ex.scores[a]):
+            items = ex.evidence_for(area)
+            if items:
+                with st.expander(f"{area.replace('_', ' ').title()} — {ex.scores[area]:g}/100 "
+                                 f"({ex.raw[area]:g} pts)"):
+                    st.markdown("\n".join(f"- {e.text()}" for e in items))
+
+
 if ss.editing:
+    skill_area_section(ss.form_student)
     with st.expander("🗑️ Delete this profile"):
         sure = st.checkbox(f"Yes, permanently delete {ss.editing} and all its entries", key="del_ok")
         st.button("Delete profile", on_click=on_delete, disabled=not sure, type="secondary")

@@ -1,0 +1,225 @@
+# Target job roles.
+#   profile:      ideal skill-area scores (0-100) — used for match score, gaps and synthetic data
+#   interests:    interests (from app.yaml) typical of people in this role
+#   certificates / projects: next-step suggestions; `area` links each to a skill gap,
+#                 `level` is beginner (years 1-2, "explore") or advanced (years 3-4, "internship-ready")
+#   events:       event types (from app.yaml) worth attending, with a reason
+
+roles:
+  - name: Software Developer
+    summary: Builds and maintains software applications with strong programming fundamentals.
+    profile: {PROGRAMMING: 85, WEB: 40, MOBILE: 25, DATA_ANALYSIS: 20, ML_AI: 15, CLOUD_DEVOPS: 35, SECURITY: 15, DESIGN_UX: 10, EMBEDDED_IOT: 10, BUSINESS_PRODUCT: 15}
+    interests: [Building apps]
+    certificates:
+      - {name: "NPTEL Programming in Java", area: PROGRAMMING, level: beginner}
+      - {name: "Coursera Python for Everybody", area: PROGRAMMING, level: beginner}
+      - {name: "NPTEL Data Structures and Algorithms", area: PROGRAMMING, level: advanced}
+      - {name: "Oracle Certified Associate Java SE", area: PROGRAMMING, level: advanced}
+      - {name: "AWS Certified Developer – Associate", area: CLOUD_DEVOPS, level: advanced}
+    projects:
+      - {title: "Command-line expense tracker with file storage", area: PROGRAMMING, level: beginner}
+      - {title: "Personal portfolio website", area: WEB, level: beginner}
+      - {title: "REST API with tests and CI pipeline", area: PROGRAMMING, level: advanced}
+      - {title: "Open-source contribution to a GitHub project", area: PROGRAMMING, level: advanced}
+    events:
+      - {type: Competition, why: "Coding contests sharpen problem solving for interviews"}
+      - {type: Hackathon, why: "Ship a working product with a team under time pressure"}
+      - {type: Workshop, why: "Learn tools like Git and testing frameworks hands-on"}
+
+  - name: Full-Stack Web Developer
+    summary: Builds complete web applications — user interface, server and database.
+    profile: {PROGRAMMING: 60, WEB: 90, MOBILE: 20, DATA_ANALYSIS: 20, ML_AI: 10, CLOUD_DEVOPS: 40, SECURITY: 20, DESIGN_UX: 35, EMBEDDED_IOT: 5, BUSINESS_PRODUCT: 15}
+    interests: [Building apps, Design]
+    certificates:
+      - {name: "freeCodeCamp Responsive Web Design", area: WEB, level: beginner}
+      - {name: "Coursera HTML, CSS and JavaScript for Web Developers", area: WEB, level: beginner}
+      - {name: "Meta Front-End Developer (Coursera)", area: WEB, level: advanced}
+      - {name: "Meta Back-End Developer (Coursera)", area: WEB, level: advanced}
+      - {name: "AWS Certified Cloud Practitioner", area: CLOUD_DEVOPS, level: advanced}
+    projects:
+      - {title: "Responsive landing page with HTML/CSS", area: WEB, level: beginner}
+      - {title: "To-do app in React with local storage", area: WEB, level: beginner}
+      - {title: "MERN-stack app with login and a database, deployed online", area: WEB, level: advanced}
+      - {title: "E-commerce site with payments sandbox and admin panel", area: WEB, level: advanced}
+    events:
+      - {type: Hackathon, why: "Build and demo a full web product in a weekend"}
+      - {type: Workshop, why: "Pick up frameworks like React or Node.js quickly"}
+      - {type: Bootcamp, why: "Intensive full-stack practice with mentors"}
+
+  - name: Mobile App Developer
+    summary: Designs and builds apps for Android and iOS.
+    profile: {PROGRAMMING: 60, WEB: 30, MOBILE: 90, DATA_ANALYSIS: 10, ML_AI: 10, CLOUD_DEVOPS: 25, SECURITY: 15, DESIGN_UX: 40, EMBEDDED_IOT: 10, BUSINESS_PRODUCT: 15}
+    interests: [Building apps, Design]
+    certificates:
+      - {name: "Google Android Basics with Compose", area: MOBILE, level: beginner}
+      - {name: "Udemy Flutter & Dart – The Complete Guide", area: MOBILE, level: beginner}
+      - {name: "Google Associate Android Developer", area: MOBILE, level: advanced}
+      - {name: "Meta iOS Developer (Coursera)", area: MOBILE, level: advanced}
+      - {name: "Google UX Design Certificate", area: DESIGN_UX, level: advanced}
+    projects:
+      - {title: "Flutter quiz app with local scores", area: MOBILE, level: beginner}
+      - {title: "Android notes app in Kotlin", area: MOBILE, level: beginner}
+      - {title: "Campus events app with Firebase backend and push notifications", area: MOBILE, level: advanced}
+      - {title: "Publish an app to the Play Store", area: MOBILE, level: advanced}
+    events:
+      - {type: Hackathon, why: "Mobile tracks reward polished, demo-ready apps"}
+      - {type: Workshop, why: "Hands-on sessions on Flutter or Android Jetpack"}
+      - {type: Conference, why: "Developer events like Google I/O Extended show what's new"}
+
+  - name: Data Analyst
+    summary: Turns raw data into insights, dashboards and reports for decision makers.
+    profile: {PROGRAMMING: 40, WEB: 10, MOBILE: 5, DATA_ANALYSIS: 90, ML_AI: 30, CLOUD_DEVOPS: 15, SECURITY: 5, DESIGN_UX: 20, EMBEDDED_IOT: 5, BUSINESS_PRODUCT: 50}
+    interests: [Working with data, Business]
+    certificates:
+      - {name: "Google Data Analytics Professional Certificate", area: DATA_ANALYSIS, level: beginner}
+      - {name: "Excel Skills for Business (Coursera)", area: DATA_ANALYSIS, level: beginner}
+      - {name: "Microsoft Power BI Data Analyst (PL-300)", area: DATA_ANALYSIS, level: advanced}
+      - {name: "Tableau Desktop Specialist", area: DATA_ANALYSIS, level: advanced}
+      - {name: "NPTEL Business Analytics for Management Decision", area: BUSINESS_PRODUCT, level: advanced}
+    projects:
+      - {title: "Excel dashboard on a public dataset", area: DATA_ANALYSIS, level: beginner}
+      - {title: "SQL analysis of a sample sales database", area: DATA_ANALYSIS, level: beginner}
+      - {title: "Power BI dashboard with KPIs and a written insights report", area: DATA_ANALYSIS, level: advanced}
+      - {title: "End-to-end Python EDA project published on GitHub", area: DATA_ANALYSIS, level: advanced}
+    events:
+      - {type: Competition, why: "Data/case competitions test real analysis skills"}
+      - {type: Workshop, why: "Learn SQL, Power BI or Tableau hands-on"}
+      - {type: Seminar, why: "See how companies use analytics in practice"}
+
+  - name: Data Scientist
+    summary: Uses statistics and machine learning to answer questions and predict outcomes.
+    profile: {PROGRAMMING: 60, WEB: 10, MOBILE: 5, DATA_ANALYSIS: 75, ML_AI: 85, CLOUD_DEVOPS: 25, SECURITY: 5, DESIGN_UX: 10, EMBEDDED_IOT: 5, BUSINESS_PRODUCT: 25}
+    interests: [Working with data, AI & research]
+    certificates:
+      - {name: "IBM Data Science Professional Certificate", area: DATA_ANALYSIS, level: beginner}
+      - {name: "Coursera Machine Learning Specialization (Andrew Ng)", area: ML_AI, level: beginner}
+      - {name: "NPTEL Introduction to Statistics", area: DATA_ANALYSIS, level: beginner}
+      - {name: "Coursera Deep Learning Specialization", area: ML_AI, level: advanced}
+      - {name: "AWS Certified Machine Learning – Specialty", area: ML_AI, level: advanced}
+    projects:
+      - {title: "Titanic or house-price prediction on Kaggle", area: ML_AI, level: beginner}
+      - {title: "Exploratory data analysis notebook with visualisations", area: DATA_ANALYSIS, level: beginner}
+      - {title: "Customer churn model with feature engineering and evaluation report", area: ML_AI, level: advanced}
+      - {title: "Kaggle competition entry with a public write-up", area: ML_AI, level: advanced}
+    events:
+      - {type: Competition, why: "Kaggle-style competitions build a public track record"}
+      - {type: Hackathon, why: "AI/data tracks let you apply models to real problems"}
+      - {type: Conference, why: "Data science conferences show current methods"}
+
+  - name: ML/AI Engineer
+    summary: Builds, trains and deploys machine-learning and AI systems in production.
+    profile: {PROGRAMMING: 75, WEB: 15, MOBILE: 10, DATA_ANALYSIS: 45, ML_AI: 95, CLOUD_DEVOPS: 45, SECURITY: 10, DESIGN_UX: 5, EMBEDDED_IOT: 15, BUSINESS_PRODUCT: 10}
+    interests: [AI & research, Working with data]
+    certificates:
+      - {name: "Coursera Machine Learning Specialization (Andrew Ng)", area: ML_AI, level: beginner}
+      - {name: "Google Machine Learning Crash Course", area: ML_AI, level: beginner}
+      - {name: "Coursera Deep Learning Specialization", area: ML_AI, level: advanced}
+      - {name: "TensorFlow Developer Certificate", area: ML_AI, level: advanced}
+      - {name: "AWS Certified Machine Learning – Specialty", area: CLOUD_DEVOPS, level: advanced}
+    projects:
+      - {title: "Image classifier with a pretrained CNN", area: ML_AI, level: beginner}
+      - {title: "Sentiment analysis of tweets or reviews", area: ML_AI, level: beginner}
+      - {title: "Deploy an ML model as an API with Docker", area: CLOUD_DEVOPS, level: advanced}
+      - {title: "Retrieval-augmented chatbot over course notes", area: ML_AI, level: advanced}
+    events:
+      - {type: Hackathon, why: "AI hackathons reward working, demoable models"}
+      - {type: Conference, why: "Keep up with fast-moving AI research"}
+      - {type: Workshop, why: "Hands-on PyTorch/TensorFlow sessions"}
+
+  - name: Cloud/DevOps Engineer
+    summary: Automates, deploys and runs applications reliably on cloud infrastructure.
+    profile: {PROGRAMMING: 55, WEB: 30, MOBILE: 5, DATA_ANALYSIS: 10, ML_AI: 10, CLOUD_DEVOPS: 95, SECURITY: 40, DESIGN_UX: 5, EMBEDDED_IOT: 10, BUSINESS_PRODUCT: 10}
+    interests: [Cloud & infrastructure]
+    certificates:
+      - {name: "AWS Certified Cloud Practitioner", area: CLOUD_DEVOPS, level: beginner}
+      - {name: "Microsoft Azure Fundamentals (AZ-900)", area: CLOUD_DEVOPS, level: beginner}
+      - {name: "AWS Certified Solutions Architect – Associate", area: CLOUD_DEVOPS, level: advanced}
+      - {name: "Certified Kubernetes Application Developer (CKAD)", area: CLOUD_DEVOPS, level: advanced}
+      - {name: "HashiCorp Terraform Associate", area: CLOUD_DEVOPS, level: advanced}
+    projects:
+      - {title: "Host a static website on AWS S3", area: CLOUD_DEVOPS, level: beginner}
+      - {title: "Dockerise a small web app", area: CLOUD_DEVOPS, level: beginner}
+      - {title: "CI/CD pipeline with GitHub Actions deploying to the cloud", area: CLOUD_DEVOPS, level: advanced}
+      - {title: "Kubernetes deployment with monitoring dashboards", area: CLOUD_DEVOPS, level: advanced}
+    events:
+      - {type: Workshop, why: "Cloud provider workshops often include free credits"}
+      - {type: Bootcamp, why: "Intensive DevOps practice with real pipelines"}
+      - {type: Conference, why: "AWS/Google Cloud community days show industry practice"}
+
+  - name: Cybersecurity Analyst
+    summary: Protects systems and networks by finding and fixing security weaknesses.
+    profile: {PROGRAMMING: 45, WEB: 30, MOBILE: 10, DATA_ANALYSIS: 20, ML_AI: 10, CLOUD_DEVOPS: 35, SECURITY: 95, DESIGN_UX: 5, EMBEDDED_IOT: 15, BUSINESS_PRODUCT: 15}
+    interests: [Security]
+    certificates:
+      - {name: "Google Cybersecurity Professional Certificate", area: SECURITY, level: beginner}
+      - {name: "Cisco Introduction to Cybersecurity", area: SECURITY, level: beginner}
+      - {name: "CompTIA Security+", area: SECURITY, level: advanced}
+      - {name: "EC-Council Certified Ethical Hacker (CEH)", area: SECURITY, level: advanced}
+      - {name: "Cisco CCNA", area: SECURITY, level: advanced}
+    projects:
+      - {title: "Home lab: scan your own network with Nmap and Wireshark", area: SECURITY, level: beginner}
+      - {title: "Password strength checker", area: SECURITY, level: beginner}
+      - {title: "Web vulnerability audit of a deliberately vulnerable app (DVWA/Juice Shop)", area: SECURITY, level: advanced}
+      - {title: "CTF write-ups blog with 10+ solved challenges", area: SECURITY, level: advanced}
+    events:
+      - {type: Competition, why: "CTF competitions are the standard way to prove security skills"}
+      - {type: Workshop, why: "Hands-on ethical-hacking labs"}
+      - {type: Conference, why: "Security conferences cover current threats"}
+
+  - name: UI/UX Designer
+    summary: Researches users and designs clear, usable interfaces for apps and websites.
+    profile: {PROGRAMMING: 20, WEB: 45, MOBILE: 30, DATA_ANALYSIS: 15, ML_AI: 5, CLOUD_DEVOPS: 5, SECURITY: 5, DESIGN_UX: 95, EMBEDDED_IOT: 5, BUSINESS_PRODUCT: 40}
+    interests: [Design, Building apps]
+    certificates:
+      - {name: "Google UX Design Professional Certificate", area: DESIGN_UX, level: beginner}
+      - {name: "Figma UI Design Essentials (Udemy)", area: DESIGN_UX, level: beginner}
+      - {name: "Interaction Design Foundation – User Research", area: DESIGN_UX, level: advanced}
+      - {name: "Coursera UI/UX Design Specialization (CalArts)", area: DESIGN_UX, level: advanced}
+    projects:
+      - {title: "Redesign your college website in Figma", area: DESIGN_UX, level: beginner}
+      - {title: "Wireframes and prototype for a mobile app idea", area: DESIGN_UX, level: beginner}
+      - {title: "Case study with user interviews, personas and usability testing", area: DESIGN_UX, level: advanced}
+      - {title: "Design system with reusable components", area: DESIGN_UX, level: advanced}
+    events:
+      - {type: Workshop, why: "Figma and design-thinking workshops build practical skill"}
+      - {type: Hackathon, why: "Design roles on hackathon teams build your portfolio"}
+      - {type: Competition, why: "Design challenges give portfolio-ready briefs"}
+
+  - name: Embedded/IoT Engineer
+    summary: Programs microcontrollers and connected devices that sense and control the physical world.
+    profile: {PROGRAMMING: 60, WEB: 10, MOBILE: 15, DATA_ANALYSIS: 15, ML_AI: 15, CLOUD_DEVOPS: 20, SECURITY: 15, DESIGN_UX: 5, EMBEDDED_IOT: 95, BUSINESS_PRODUCT: 5}
+    interests: [Hardware]
+    certificates:
+      - {name: "NPTEL Introduction to Internet of Things", area: EMBEDDED_IOT, level: beginner}
+      - {name: "Coursera Introduction to Embedded Systems", area: EMBEDDED_IOT, level: beginner}
+      - {name: "NPTEL Embedded Systems Design", area: EMBEDDED_IOT, level: advanced}
+      - {name: "AWS IoT Core training", area: CLOUD_DEVOPS, level: advanced}
+    projects:
+      - {title: "Arduino temperature and humidity monitor", area: EMBEDDED_IOT, level: beginner}
+      - {title: "Raspberry Pi home automation switch", area: EMBEDDED_IOT, level: beginner}
+      - {title: "ESP32 sensor network sending data to a cloud dashboard", area: EMBEDDED_IOT, level: advanced}
+      - {title: "Line-following robot with PID control", area: EMBEDDED_IOT, level: advanced}
+    events:
+      - {type: Hackathon, why: "Hardware hackathons let you prototype real devices"}
+      - {type: Workshop, why: "Hands-on Arduino/ESP32 and soldering sessions"}
+      - {type: Competition, why: "Robotics competitions test embedded skills end to end"}
+
+  - name: Business/Product Analyst
+    summary: Bridges business and tech — gathers requirements, analyses data and shapes products.
+    profile: {PROGRAMMING: 20, WEB: 20, MOBILE: 10, DATA_ANALYSIS: 60, ML_AI: 10, CLOUD_DEVOPS: 10, SECURITY: 5, DESIGN_UX: 35, EMBEDDED_IOT: 5, BUSINESS_PRODUCT: 90}
+    interests: [Business, Working with data]
+    certificates:
+      - {name: "Google Project Management Certificate", area: BUSINESS_PRODUCT, level: beginner}
+      - {name: "Excel Skills for Business (Coursera)", area: DATA_ANALYSIS, level: beginner}
+      - {name: "IIBA Entry Certificate in Business Analysis (ECBA)", area: BUSINESS_PRODUCT, level: advanced}
+      - {name: "Professional Scrum Product Owner (PSPO I)", area: BUSINESS_PRODUCT, level: advanced}
+      - {name: "Microsoft Power BI Data Analyst (PL-300)", area: DATA_ANALYSIS, level: advanced}
+    projects:
+      - {title: "Market research report on a campus startup idea", area: BUSINESS_PRODUCT, level: beginner}
+      - {title: "Excel model comparing pricing options", area: DATA_ANALYSIS, level: beginner}
+      - {title: "Product requirements document with user stories for an app", area: BUSINESS_PRODUCT, level: advanced}
+      - {title: "KPI dashboard and recommendations for a real club or business", area: DATA_ANALYSIS, level: advanced}
+    events:
+      - {type: Competition, why: "Case competitions are the classic way to show business thinking"}
+      - {type: Seminar, why: "Talks by product managers explain the role"}
+      - {type: Conference, why: "Startup and product events build your network"}

@@ -18,3 +18,14 @@
 | 14 | 1 | Inline errors: on submit, errors are stored in session state and the page reruns to show them under each field | Streamlit forms render fields before the submit result is known |
 | 15 | 1 | `CAREER_DB_PATH` env var overrides the DB path | Lets UI tests run against a temporary database |
 | 16 | 1 | "Load demo profile" button deferred to Phase 6 (with `demo/`) | The phase table schedules the demo loader there |
+| 17 | 2 | Keywords map to **skills**, skills map to **areas**; each skill name (and each `/` part of 3+ chars) is a keyword automatically | One small taxonomy drives the picker, matching and explanations |
+| 18 | 2 | Keyword matching is case-insensitive on word boundaries, longest keyword first, and matched text is consumed | "React Native" → MOBILE not WEB; "ml" never matches inside "html" |
+| 19 | 2 | An item adds its points **once per area** it touches, however many keywords match | Stops a keyword-heavy description from inflating a score |
+| 20 | 2 | A certificate's chosen domain / an event's theme is added to the keyword-matched areas | Users can steer scoring where titles are vague ("Certificate of Merit") |
+| 21 | 2 | Project +1 bonus applies to team leads and **hackathon-type** projects | Projects have no result field, so "hackathon winner" can't be captured directly; event wins get their own bonus |
+| 22 | 2 | Absolute normalisation: score = min(100, raw / 15 × 100) (`area_cap` in skills.yaml) | Keeps gaps meaningful (a beginner really is below the ideal) instead of every student's best area being 100 |
+| 23 | 2 | Weights live in `skills.yaml → scoring` | Tunable without code changes |
+| 24 | 2 | Feature order: 10 areas, year, CGPA, 8 interest flags (20 features); missing CGPA → 7.0 | Fixed, documented order; neutral imputation keeps CGPA optional |
+| 25 | 2 | All 11 roles from the prompt are included (it says "about 10") | Each listed role is distinct and useful |
+| 26 | 2 | Certificate domain auto-suggest happens on save when the domain is left blank | `st.data_editor` cells can't react live to typing |
+| 27 | 2 | Area scores + evidence are shown on the Profile page for a saved profile | Meets the Phase 2 "done when" before the Results page exists |

@@ -27,3 +27,15 @@ def skill_names() -> list[str]:
 
 def skill_areas() -> list[str]:
     return list(load_yaml("skills.yaml").get("areas", []))
+
+
+def scoring() -> dict[str, float]:
+    return dict(load_yaml("skills.yaml")["scoring"])
+
+
+def roles() -> list[dict[str, Any]]:
+    return list(load_yaml("roles.yaml")["roles"])
+
+
+def role_names() -> list[str]:
+    return [r["name"] for r in roles()]

@@ -1,6 +1,10 @@
-# Skill taxonomy: skill -> skill area.
-# Phase 1 uses this list for the self-rated skills picker.
-# Phase 2 adds keyword -> skill mappings for certificates, projects and events.
+# Skill taxonomy and rule-based extraction config.
+#   skills:   skill -> skill area   (also the self-rated skills picker on the Profile page)
+#   keywords: extra keyword -> skill (matched in certificate, project and event text)
+# Every skill name is also a keyword automatically, plus each "/"-separated part of it
+# that is at least 3 characters long (e.g. "django/flask" -> "django", "flask").
+# Matching is case-insensitive, on word boundaries, longest keyword first.
+
 areas:
   - PROGRAMMING
   - WEB
@@ -12,6 +16,16 @@ areas:
   - DESIGN_UX
   - EMBEDDED_IOT
   - BUSINESS_PRODUCT
+
+# Evidence weights (section 2.2 of the master prompt).
+scoring:
+  project: 3
+  project_bonus: 1          # team lead, or a hackathon project
+  certificate: 2
+  skill_rating_factor: 0.5  # self rating (1-5) x 0.5
+  event: 1
+  event_bonus: 1            # finalist or winner
+  area_cap: 15              # raw points that map to a score of 100
 
 skills:
   python: PROGRAMMING
@@ -61,3 +75,188 @@ skills:
   product management: BUSINESS_PRODUCT
   business analysis: BUSINESS_PRODUCT
   agile/scrum: BUSINESS_PRODUCT
+
+keywords:
+  # PROGRAMMING
+  c++: c/c++
+  cpp: c/c++
+  c programming: c/c++
+  programming in c: c/c++
+  dsa: data structures & algorithms
+  data structures: data structures & algorithms
+  algorithms: data structures & algorithms
+  competitive programming: data structures & algorithms
+  leetcode: data structures & algorithms
+  codechef: data structures & algorithms
+  codeforces: data structures & algorithms
+  github: git
+  oop: java
+  object oriented: java
+  spring boot: java
+  # WEB
+  html: html/css
+  css: html/css
+  tailwind: html/css
+  bootstrap: html/css
+  js: javascript
+  typescript: javascript
+  react.js: react
+  reactjs: react
+  next.js: react
+  angular: react
+  vue: react
+  node: node.js
+  nodejs: node.js
+  express: node.js
+  mongodb: node.js
+  mern: node.js
+  rest api: node.js
+  php: django/flask
+  fastapi: django/flask
+  web development: html/css
+  web developer: html/css
+  frontend: html/css
+  front-end: html/css
+  backend: node.js
+  back-end: node.js
+  full stack: react
+  full-stack: react
+  fullstack: react
+  website: html/css
+  # MOBILE
+  react native: android
+  android studio: android
+  dart: flutter
+  ios: swift/ios
+  swiftui: swift/ios
+  mobile app: android
+  mobile development: android
+  jetpack compose: kotlin
+  # DATA_ANALYSIS
+  mysql: sql
+  postgresql: sql
+  postgres: sql
+  database: sql
+  dbms: sql
+  power bi: power bi/tableau
+  tableau: power bi/tableau
+  data analysis: pandas
+  data analytics: pandas
+  data analyst: pandas
+  data visualization: power bi/tableau
+  data visualisation: power bi/tableau
+  dashboard: power bi/tableau
+  numpy: pandas
+  matplotlib: pandas
+  eda: pandas
+  probability: statistics
+  # ML_AI
+  ml: machine learning
+  scikit-learn: machine learning
+  sklearn: machine learning
+  data science: machine learning
+  kaggle: machine learning
+  ai: machine learning
+  artificial intelligence: machine learning
+  neural network: deep learning
+  neural networks: deep learning
+  generative ai: deep learning
+  llm: nlp
+  chatbot: nlp
+  natural language processing: nlp
+  opencv: computer vision
+  image classification: computer vision
+  object detection: computer vision
+  tensorflow: tensorflow/pytorch
+  pytorch: tensorflow/pytorch
+  keras: tensorflow/pytorch
+  # CLOUD_DEVOPS
+  amazon web services: aws
+  cloud practitioner: aws
+  solutions architect: aws
+  ec2: aws
+  s3: aws
+  az-900: azure
+  microsoft azure: azure
+  google cloud: gcp
+  cloud computing: aws
+  cloud: aws
+  devops: ci/cd
+  jenkins: ci/cd
+  github actions: ci/cd
+  terraform: ci/cd
+  ansible: ci/cd
+  k8s: kubernetes
+  containers: docker
+  shell scripting: linux
+  bash: linux
+  # SECURITY
+  cybersecurity: ethical hacking
+  cyber security: ethical hacking
+  security: web security
+  ctf: ethical hacking
+  capture the flag: ethical hacking
+  ceh: ethical hacking
+  penetration testing: ethical hacking
+  pentest: ethical hacking
+  pentesting: ethical hacking
+  kali: ethical hacking
+  nmap: ethical hacking
+  burp suite: web security
+  owasp: web security
+  security+: ethical hacking
+  forensics: ethical hacking
+  malware: ethical hacking
+  vulnerability: web security
+  wireshark: networking
+  ccna: networking
+  cisco: networking
+  computer networks: networking
+  firewall: networking
+  encryption: cryptography
+  # DESIGN_UX
+  ui/ux: ui design
+  ux: ux research
+  ui: ui design
+  user experience: ux research
+  user interface: ui design
+  adobe xd: ui design
+  wireframe: prototyping
+  wireframes: prototyping
+  wireframing: prototyping
+  prototype: prototyping
+  usability: ux research
+  graphic design: ui design
+  canva: ui design
+  design thinking: ux research
+  # EMBEDDED_IOT
+  esp32: arduino
+  esp8266: arduino
+  embedded: embedded c
+  embedded systems: embedded c
+  microcontroller: embedded c
+  8051: embedded c
+  stm32: embedded c
+  internet of things: iot
+  sensor: iot
+  sensors: iot
+  robotics: arduino
+  pcb: embedded c
+  vlsi: embedded c
+  verilog: embedded c
+  # BUSINESS_PRODUCT
+  product manager: product management
+  business analyst: business analysis
+  agile: agile/scrum
+  scrum: agile/scrum
+  jira: agile/scrum
+  market research: business analysis
+  entrepreneurship: product management
+  startup: product management
+  case study: business analysis
+  consulting: business analysis
+  marketing: business analysis
+  finance: business analysis
+  public speaking: communication
+  leadership: communication
+  stakeholder: business analysis

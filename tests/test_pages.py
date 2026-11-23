@@ -93,3 +93,18 @@ def test_history_lists_and_deletes(temp_db, full_student):
     at.button(key="hist_delete").click().run()
     assert not at.exception
     assert db.list_students(db_path=temp_db) == []
+
+
+def test_profile_shows_area_scores_and_suggests_domain(temp_db, full_student):
+    full_student.certificates[0].domain = ""          # AWS Cloud Practitioner, no domain
+    db.save_student(full_student, db_path=temp_db)
+    at = _profile()
+    at.text_input(key="load_input").input(full_student.srn)
+    at.button[0].click().run()
+    assert any("Skill areas" in h.value for h in at.subheader)
+    labels = [e.label for e in at.expander]
+    assert any(l.startswith("Cloud Devops") for l in labels)
+    md = " ".join(m.value for m in at.markdown)
+    assert "CLOUD_DEVOPS +2 from certificate 'AWS Cloud Practitioner'" in md
+    _save(at)
+    assert db.get_student(full_student.srn, db_path=temp_db).certificates[0].domain == "CLOUD_DEVOPS"
