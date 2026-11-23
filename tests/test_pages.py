@@ -101,7 +101,7 @@ def test_profile_shows_area_scores_and_suggests_domain(temp_db, full_student):
     at = _profile()
     at.text_input(key="load_input").input(full_student.srn)
     at.button[0].click().run()
-    assert any("Skill areas" in h.value for h in at.subheader)
+    assert any("Skill areas" in m.value for m in at.markdown)          # doodle section heading
     labels = [e.label for e in at.expander]
     assert any(l.startswith("Cloud & DevOps") for l in labels)
     md = " ".join(m.value for m in at.markdown)
@@ -122,7 +122,7 @@ def test_results_page_shows_match_first_and_logs_once(temp_db):
     assert "Model confidence: 100%" not in html
     assert len(at.tabs) == 3
     assert "chip-Strong" in html and "chip-Beginner" in html          # level labels shown
-    assert at.get("download_button")[0].proto.label == "⬇️ Download PDF report"
+    assert at.get("download_button")[0].proto.label == "Download PDF report"
     at.run()  # rerun must not log a duplicate prediction
     assert len(db.list_predictions(demo.student.srn, db_path=temp_db)) == 1
 
@@ -156,4 +156,4 @@ def test_load_demo_profile_button(temp_db):
 def test_home_page_renders_with_navigation():
     at = _app("app.py").run()
     assert not at.exception
-    assert any("AI Career Recommender" in m.value for m in at.markdown)
+    assert any("career that" in m.value and "hero-title" in m.value for m in at.markdown)

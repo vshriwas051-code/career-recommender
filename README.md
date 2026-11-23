@@ -8,19 +8,25 @@ projects and events attended. The app scores their skills in 10 areas, predicts 
 roles** with a machine-learning model, and turns that into advice they can act on. It runs fully
 offline on a laptop, with no paid APIs and no LLM calls.
 
-![Results page — top-3 roles with skill match, model confidence and skill levels](docs/screenshots/results.png)
+![Home page — cream background, floating doodle scene, Build my profile and See a demo buttons](docs/screenshots/home.png)
 
 ---
 
 ## 1. Overview & screenshots
 
-| Results: why, gaps, next steps | Profile: skill areas with evidence |
+| Results: top 3 roles and skill levels | Results: radar, why, gaps, next steps |
 |---|---|
-| ![Role details with radar, evidence, gap chart and next-steps checklist](docs/screenshots/results-details.png) | ![Skill-area scores with Beginner / Intermediate / Strong levels and evidence](docs/screenshots/profile-skill-areas.png) |
+| ![Results page with match rings, Top pick sticker and skill bars](docs/screenshots/results.png) | ![Role details with radar, evidence, gap chart and next-steps checklist](docs/screenshots/results-details.png) |
+
+| Profile: skill areas with evidence | History |
+|---|---|
+| ![Skill-area bars with Beginner / Intermediate / Strong levels and evidence](docs/screenshots/profile-skill-areas.png) | ![Saved profiles table in a white card](docs/screenshots/history.png) |
 
 | PDF report | About: how the model works |
 |---|---|
-| ![First page of the PDF career report](docs/screenshots/pdf-report-p1.png) | ![About page with metrics and the synthetic-data note](docs/screenshots/about.png) |
+| ![First page of the PDF career report](docs/screenshots/pdf-report-p1.png) | ![About page with the synthetic-data note and architecture diagram](docs/screenshots/about.png) |
+
+<p align="center"><img src="docs/screenshots/mobile.png" width="520" alt="Home and Results on a 390 px phone screen"></p>
 
 All screenshots show **fictional demo students**.
 
@@ -45,7 +51,7 @@ All screenshots show **fictional demo students**.
     - Years 1–2 get *explore* advice.
     - Years 3–4 get *internship-ready* advice.
     - Anything the student has already done is skipped.
-- **Results dashboard (navy theme):**
+- **Results dashboard:**
   - student card
   - role cards
   - radar chart (you vs the role's ideal vs your year's target)
@@ -54,6 +60,13 @@ All screenshots show **fictional demo students**.
   - prediction history
 - **PDF report:** `<SRN>_career_report.pdf`, with the same content, ready to print.
 - **Demo mode:** load one of 3 fictional students with one click (Home or Profile page).
+- **Look & feel:** a cream "doodle campus" design.
+  - Manrope font, ink pill buttons and white rounded cards.
+  - Original hand-drawn doodles with lime and blue accents.
+  - Top navigation, and it works on a phone (390 px).
+  - Light, CSS-only animations: floating doodles, a gliding paper plane, match rings that fill
+    up, growing skill bars, a role ticker, and a one-time confetti sprinkle.
+  - All motion switches off when your device asks for **reduced motion**.
 
 ## 3. How it works
 
@@ -166,15 +179,17 @@ career-recommender/
 │   ├── report.py           PDF report (fpdf2 + matplotlib)
 │   ├── charts.py           Plotly charts for the pages
 │   ├── demo.py             demo-profile loader
-│   ├── config.py · ui.py   YAML config loading · shared CSS
+│   ├── config.py · ui.py   YAML config loading · design tokens, doodles, CSS animations
 ├── config/                 skills.yaml · roles.yaml · app.yaml
 ├── models/                 career_model.joblib + metadata.json
 ├── reports/                model_evaluation.md · confusion_matrix.png
 ├── demo/                   3 fictional demo students (JSON)
-├── docs/                   architecture.md · architecture*.svg/png · decisions.md · screenshots/
+├── assets/                 doodles/ (original SVGs) · avatars/ (Open Peeps, CC0) · logo.svg
+├── static/fonts/           Manrope (SIL OFL), served locally
+├── docs/                   architecture.md · architecture*.svg/png · decisions.md · PHASE7_UI_REDESIGN.md · screenshots/
 ├── tests/                  pytest suite (unit + headless UI tests)
 ├── data/                   SQLite database (git-ignored, created on first run)
-└── .streamlit/config.toml  navy theme
+└── .streamlit/config.toml  cream theme, Manrope font, pill buttons
 ```
 
 Design decisions and their reasons are logged in [docs/decisions.md](docs/decisions.md).
@@ -198,3 +213,10 @@ Design decisions and their reasons are logged in [docs/decisions.md](docs/decisi
 ---
 
 Built with Python, Streamlit, scikit-learn, pandas, NumPy, Plotly, fpdf2, PyYAML, SQLite and pytest.
+
+**Credits**
+- Avatars: [Open Peeps](https://www.openpeeps.com) by Pablo Stanley, **CC0** (public domain).
+  Generated once with DiceBear and bundled in `assets/avatars/`, so there are no runtime API calls.
+- Font: [Manrope](https://github.com/googlefonts/manrope) by The Manrope Project Authors,
+  **SIL Open Font License 1.1** (`static/fonts/OFL.txt`). Bundled, so the app runs offline.
+- Doodles, logo and architecture diagram: original artwork made for this project (`assets/doodles/`).

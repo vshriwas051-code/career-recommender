@@ -6,3 +6,5 @@ Always follow CAREER_MASTER_PROMPT.md. Status is in PROGRESS.md. Decisions are i
   Do **not** create a `pages/` folder — Streamlit would auto-discover it and direct links
   (e.g. `/Results`) would bypass the navigation (decision #55).
 - Run: `streamlit run app.py` · Test: `pytest` · Retrain: `PYTHONPATH=src python -m career.train`
+- UI design rules (Phase 7): `docs/PHASE7_UI_REDESIGN.md`; tokens, doodles and all CSS live in `src/career/ui.py`.
+  Keep every animation's resting style as its final state so reduced motion still works.

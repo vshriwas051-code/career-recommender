@@ -1,10 +1,28 @@
-[theme]
-base = "dark"
-primaryColor = "#4C8DFF"
-backgroundColor = "#0B1B3B"
-secondaryBackgroundColor = "#12264F"
-textColor = "#E8EEF9"
-font = "sans serif"
+# Cream "doodle campus" theme (Phase 7). Tokens: docs/PHASE7_UI_REDESIGN.md · src/career/ui.py
+[client]
+toolbarMode = "viewer"     # hide the developer Deploy button
 
 [server]
 headless = true
+enableStaticServing = true      # serves static/ (bundled Manrope font) at app/static/...
+
+[theme]
+base = "light"
+primaryColor = "#1E1C1A"
+backgroundColor = "#F7F4EC"
+secondaryBackgroundColor = "#EFEADD"
+textColor = "#1E1C1A"
+linkColor = "#2F4BC9"
+borderColor = "#E6E0D2"
+dataframeBorderColor = "#E6E0D2"
+font = "Manrope, system-ui, sans-serif"
+headingFont = "Manrope, system-ui, sans-serif"
+buttonRadius = "full"
+baseRadius = "12px"
+chartCategoricalColors = ["#2F4BC9", "#1E1C1A", "#7DB51A", "#6B6760", "#B6F04A"]
+
+[[theme.fontFaces]]
+family = "Manrope"
+url = "app/static/fonts/Manrope-Variable.woff2"
+weight = "200 800"
+style = "normal"

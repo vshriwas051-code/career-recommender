@@ -131,23 +131,27 @@ def _plot_confusion(cm: np.ndarray, labels: list[str], path: Path) -> None:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    fig, ax = plt.subplots(figsize=(10, 8.5), facecolor="#0B1B3B")
-    ax.set_facecolor("#0B1B3B")
+    from matplotlib.colors import LinearSegmentedColormap
+
+    ink, blue = "#1E1C1A", "#2F4BC9"     # app tokens (src/career/ui.py)
+    fig, ax = plt.subplots(figsize=(10, 8.5), facecolor="#FFFFFF")
+    ax.set_facecolor("#FFFFFF")
     norm = cm / cm.sum(axis=1, keepdims=True)
-    im = ax.imshow(norm, cmap="Blues", vmin=0, vmax=1)
-    ax.set_xticks(range(len(labels)), labels, rotation=45, ha="right", color="#E8EEF9", fontsize=9)
-    ax.set_yticks(range(len(labels)), labels, color="#E8EEF9", fontsize=9)
+    im = ax.imshow(norm, cmap=LinearSegmentedColormap.from_list("cream_blue", ["#FFFFFF", "#EFEADD", blue]),
+                   vmin=0, vmax=1)
+    ax.set_xticks(range(len(labels)), labels, rotation=45, ha="right", color=ink, fontsize=9)
+    ax.set_yticks(range(len(labels)), labels, color=ink, fontsize=9)
     for i in range(len(labels)):
         for j in range(len(labels)):
             if cm[i, j]:
                 ax.text(j, i, cm[i, j], ha="center", va="center", fontsize=8,
-                        color="#FFFFFF" if norm[i, j] > 0.5 else "#0B1B3B")
-    ax.set_xlabel("Predicted role", color="#E8EEF9")
-    ax.set_ylabel("True role", color="#E8EEF9")
+                        color="#FFFFFF" if norm[i, j] > 0.5 else ink)
+    ax.set_xlabel("Predicted role", color=ink)
+    ax.set_ylabel("True role", color=ink)
     ax.set_title("Confusion matrix — synthetic test set (row-normalised colour, counts shown)",
-                 color="#E8EEF9", fontsize=11)
+                 color=ink, fontsize=11)
     cbar = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
-    cbar.ax.yaxis.set_tick_params(color="#E8EEF9", labelcolor="#E8EEF9")
+    cbar.ax.yaxis.set_tick_params(color=ink, labelcolor=ink)
     fig.tight_layout()
     fig.savefig(path, dpi=130, facecolor=fig.get_facecolor())
     plt.close(fig)

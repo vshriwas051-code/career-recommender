@@ -9,6 +9,7 @@
 | 4 Prediction & advice | ✅ Done | predict.py (top-3, cosine match, softened/capped confidence ≤ 90 %), explain.py (why / year-adjusted gaps / next steps), 3 fictional demo profiles all predict their expected role, prediction history logged, basic Results page (match-first cards); 101 tests |
 | 5 Results UI & PDF | ✅ Done | Results page (match-first cards, level chips, radar, why, gap chart, next-steps checklist, history), PDF download `<SRN>_career_report.pdf`, About page, `st.navigation` (pages/ → views/); level labels Beginner/Intermediate/Strong everywhere; 116 tests |
 | 6 Polish & submit | ✅ Done | Demo loader (Profile + one-click on Home), README with screenshots, docs/architecture.md, outline-only transparent diagrams (light/dark · SVG/PNG), CLAUDE.md + master-prompt layout → views/; **fresh clone from GitHub verified** (README steps, Python 3.14: install, 123 tests, app + demo flow); 123 tests |
+| 7 UI redesign | ✅ Done | Cream "doodle campus" look: Manrope (bundled), cream/ink/blue/lime tokens, top nav + doodle logo, hero with floating doodle scene, white section cards, match rings, Top-pick sticker, pill tabs, HTML skill bars, role ticker, one-time confetti; 15 CSS animations, all off under reduced motion; PDF + charts restyled; checked at 1440×900 and 390×844; 132 tests |
 
 **All phases complete.**
 

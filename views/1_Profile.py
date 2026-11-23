@@ -10,15 +10,14 @@ import pandas as pd  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from career import db  # noqa: E402
-from career.charts import area_bar_figure  # noqa: E402
 from career.config import app_config, area_label, skill_areas, skill_names  # noqa: E402
 from career.demo import install_demo, list_demos  # noqa: E402
 from career.models import Certificate, Event, Project, Student, _to_date  # noqa: E402
 from career.skills import area_level, extract, suggest_domain  # noqa: E402
-from career.ui import apply_style  # noqa: E402
+from career.ui import apply_style, html, page_header, section_title, skill_bars  # noqa: E402
 from career.validate import normalize_srn, validate_student  # noqa: E402
 
-st.set_page_config(page_title="Profile", page_icon="👤", layout="wide")
+st.set_page_config(page_title="Profile · Career Recommender", layout="wide")
 apply_style()
 
 cfg = app_config()
@@ -147,20 +146,23 @@ elif "f_name" not in ss:
     fill_form(ss.form_student if ss.editing else None)
 
 # ---------- header ----------
-st.title("👤 Student Profile")
+page_header("Your profile", "Tell us what you've learned and built. We'll turn it into skill scores and "
+            "career suggestions.", "grad-cap")
 mode = f"Editing **{ss.editing}**" if ss.editing else "Creating a **new** profile"
 st.caption(f"{mode} · fields marked * are required")
 
-c1, c2, c3 = st.columns([3, 1, 1], vertical_alignment="bottom")
-c1.text_input("Load a saved profile by SRN", key="load_input", placeholder="e.g. PES1UG22CS101")
-c2.button("Load", on_click=on_load, width="stretch")
-c3.button("New profile", on_click=on_new, width="stretch")
+with st.container(key="card-load"):
+    section_title("Start here", "compass")
+    c1, c2, c3 = st.columns([3, 1, 1], vertical_alignment="bottom")
+    c1.text_input("Load a saved profile by SRN", key="load_input", placeholder="e.g. PES1UG22CS101")
+    c2.button("Load", on_click=on_load, width="stretch")
+    c3.button("New profile", on_click=on_new, width="stretch")
 
-DEMOS = {d.key: d for d in list_demos()}
-d1, d2 = st.columns([3, 2], vertical_alignment="bottom")
-d1.selectbox("…or try a fictional demo student", list(DEMOS), key="demo_pick",
-             format_func=lambda k: f"{DEMOS[k].student.name} — {DEMOS[k].description}")
-d2.button("🎓 Load demo profile", on_click=on_load_demo, width="stretch", key="demo_btn")
+    DEMOS = {d.key: d for d in list_demos()}
+    d1, d2 = st.columns([3, 2], vertical_alignment="bottom")
+    d1.selectbox("…or try a fictional demo student", list(DEMOS), key="demo_pick",
+                 format_func=lambda k: f"{DEMOS[k].student.name} — {DEMOS[k].description}")
+    d2.button("Load demo profile", on_click=on_load_demo, width="stretch", key="demo_btn")
 
 if "flash" in ss:
     kind, msg = ss.pop("flash")
@@ -170,97 +172,102 @@ ver = ss.editor_ver
 
 # ---------- form ----------
 with st.form("profile_form", border=False):
-    st.subheader("Basic details")
-    a, b = st.columns(2)
-    with a:
-        st.text_input("Full name *", key="f_name")
-        err("name")
-        st.text_input("SRN *", key="f_srn", disabled=bool(ss.editing),
-                      help="Uppercase letters and digits, 6–15 characters. Lowercase is converted.")
-        err("srn")
-        st.text_input("College name *", key="f_college")
-        err("college")
-    with b:
-        st.text_input("Branch / department", key="f_branch", placeholder="e.g. CSE")
-        st.text_input("Class / section", key="f_class", placeholder="e.g. 5A")
-        y, g = st.columns(2)
-        with y:
-            st.selectbox("Year of study *", list(range(cfg["year_min"], cfg["year_max"] + 1)),
-                         key="f_year")
-            err("year_of_study")
-        with g:
-            st.number_input("CGPA (optional)", key="f_cgpa", step=0.1, format="%.2f",
-                            placeholder="0 – 10")
-            err("cgpa")
+    with st.container(key="card-basic"):
+        section_title("Basic details", "grad-cap")
+        a, b = st.columns(2)
+        with a:
+            st.text_input("Full name *", key="f_name")
+            err("name")
+            st.text_input("SRN *", key="f_srn", disabled=bool(ss.editing),
+                          help="Uppercase letters and digits, 6–15 characters. Lowercase is converted.")
+            err("srn")
+            st.text_input("College name *", key="f_college")
+            err("college")
+        with b:
+            st.text_input("Branch / department", key="f_branch", placeholder="e.g. CSE")
+            st.text_input("Class / section", key="f_class", placeholder="e.g. 5A")
+            y, g = st.columns(2)
+            with y:
+                st.selectbox("Year of study *", list(range(cfg["year_min"], cfg["year_max"] + 1)),
+                             key="f_year")
+                err("year_of_study")
+            with g:
+                st.number_input("CGPA (optional)", key="f_cgpa", step=0.1, format="%.2f",
+                                placeholder="0 – 10")
+                err("cgpa")
 
-    st.subheader("Skills & interests")
-    s1, s2 = st.columns([3, 2])
-    with s1:
-        st.caption("Self-rated skills — pick a skill and rate yourself 1 (beginner) to 5 (expert).")
-        skills_df = st.data_editor(
-            ss.skills_df, key=f"skills_{ver}", num_rows="dynamic", width="stretch",
+    with st.container(key="card-skills"):
+        section_title("Skills & interests", "lightbulb")
+        s1, s2 = st.columns([3, 2])
+        with s1:
+            st.caption("Self-rated skills — pick a skill and rate yourself 1 (beginner) to 5 (expert).")
+            skills_df = st.data_editor(
+                ss.skills_df, key=f"skills_{ver}", num_rows="dynamic", width="stretch",
+                hide_index=True,
+                column_config={
+                    "skill": st.column_config.SelectboxColumn("Skill", options=skill_names(), required=True),
+                    "rating": st.column_config.NumberColumn("Rating", min_value=1, max_value=5, step=1,
+                                                            default=3),
+                })
+            err("skills")
+        with s2:
+            st.multiselect("Interests", cfg["interests"], key="f_interests")
+
+    with st.container(key="card-certs"):
+        section_title("Certificates", "star")
+        st.caption("Leave **Domain** blank to auto-detect it from the title.")
+        certs_df = st.data_editor(
+            ss.certs_df, key=f"certs_{ver}", num_rows="dynamic", width="stretch", hide_index=True,
+            column_config={
+                "title": st.column_config.TextColumn("Title *"),
+                "issuer": st.column_config.TextColumn("Issuing organisation"),
+                "platform": st.column_config.SelectboxColumn("Platform", options=cfg["certificate_platforms"],
+                                                             default="Other"),
+                "domain": st.column_config.SelectboxColumn(
+                    "Domain", options=skill_areas(), format_func=area_label, width="medium",
+                    help="Leave blank and it is auto-detected from the title when you save."),
+                "completion_date": st.column_config.DateColumn("Completed on", max_value=TODAY,
+                                                               format="YYYY-MM-DD"),
+                "credential_url": st.column_config.LinkColumn("Credential URL"),
+            })
+        err("certificates")
+
+    with st.container(key="card-projects"):
+        section_title("Projects", "laptop")
+        projects_df = st.data_editor(
+            ss.projects_df, key=f"projects_{ver}", num_rows="dynamic", width="stretch",
             hide_index=True,
             column_config={
-                "skill": st.column_config.SelectboxColumn("Skill", options=skill_names(), required=True),
-                "rating": st.column_config.NumberColumn("Rating", min_value=1, max_value=5, step=1,
-                                                        default=3),
+                "title": st.column_config.TextColumn("Title *"),
+                "description": st.column_config.TextColumn("Short description", width="large"),
+                "tech_stack": st.column_config.MultiselectColumn(
+                    "Tech stack", options=skill_names(), accept_new_options=True,
+                    help="Pick from the list or type your own."),
+                "role": st.column_config.SelectboxColumn("Role", options=cfg["project_roles"], default="Solo"),
+                "project_type": st.column_config.SelectboxColumn("Type", options=cfg["project_types"],
+                                                                 default="Academic"),
+                "github_url": st.column_config.LinkColumn("GitHub link"),
             })
-        err("skills")
-    with s2:
-        st.multiselect("Interests", cfg["interests"], key="f_interests")
+        err("projects")
 
-    st.subheader("Certificates")
-    st.caption("Leave **Domain** blank to auto-detect it from the title.")
-    certs_df = st.data_editor(
-        ss.certs_df, key=f"certs_{ver}", num_rows="dynamic", width="stretch", hide_index=True,
-        column_config={
-            "title": st.column_config.TextColumn("Title *"),
-            "issuer": st.column_config.TextColumn("Issuing organisation"),
-            "platform": st.column_config.SelectboxColumn("Platform", options=cfg["certificate_platforms"],
-                                                         default="Other"),
-            "domain": st.column_config.SelectboxColumn(
-                "Domain", options=skill_areas(), format_func=area_label, width="medium",
-                help="Leave blank and it is auto-detected from the title when you save."),
-            "completion_date": st.column_config.DateColumn("Completed on", max_value=TODAY,
-                                                           format="YYYY-MM-DD"),
-            "credential_url": st.column_config.LinkColumn("Credential URL"),
-        })
-    err("certificates")
+    with st.container(key="card-events"):
+        section_title("Events attended", "rocket")
+        events_df = st.data_editor(
+            ss.events_df, key=f"events_{ver}", num_rows="dynamic", width="stretch",
+            hide_index=True,
+            column_config={
+                "name": st.column_config.TextColumn("Event name *"),
+                "event_type": st.column_config.SelectboxColumn("Type", options=cfg["event_types"],
+                                                               default="Workshop"),
+                "theme": st.column_config.SelectboxColumn("Theme / domain", options=skill_areas(),
+                                                          format_func=area_label),
+                "event_date": st.column_config.DateColumn("Date", max_value=TODAY, format="YYYY-MM-DD"),
+                "participation": st.column_config.SelectboxColumn(
+                    "Participation", options=cfg["participation_levels"], default="Attended"),
+            })
+        err("events")
 
-    st.subheader("Projects")
-    projects_df = st.data_editor(
-        ss.projects_df, key=f"projects_{ver}", num_rows="dynamic", width="stretch",
-        hide_index=True,
-        column_config={
-            "title": st.column_config.TextColumn("Title *"),
-            "description": st.column_config.TextColumn("Short description", width="large"),
-            "tech_stack": st.column_config.MultiselectColumn(
-                "Tech stack", options=skill_names(), accept_new_options=True,
-                help="Pick from the list or type your own."),
-            "role": st.column_config.SelectboxColumn("Role", options=cfg["project_roles"], default="Solo"),
-            "project_type": st.column_config.SelectboxColumn("Type", options=cfg["project_types"],
-                                                             default="Academic"),
-            "github_url": st.column_config.LinkColumn("GitHub link"),
-        })
-    err("projects")
-
-    st.subheader("Events attended")
-    events_df = st.data_editor(
-        ss.events_df, key=f"events_{ver}", num_rows="dynamic", width="stretch",
-        hide_index=True,
-        column_config={
-            "name": st.column_config.TextColumn("Event name *"),
-            "event_type": st.column_config.SelectboxColumn("Type", options=cfg["event_types"],
-                                                           default="Workshop"),
-            "theme": st.column_config.SelectboxColumn("Theme / domain", options=skill_areas(),
-                                                      format_func=area_label),
-            "event_date": st.column_config.DateColumn("Date", max_value=TODAY, format="YYYY-MM-DD"),
-            "participation": st.column_config.SelectboxColumn(
-                "Participation", options=cfg["participation_levels"], default="Attended"),
-        })
-    err("events")
-
-    submitted = st.form_submit_button("💾 Save profile", type="primary", key="save_btn")
+    submitted = st.form_submit_button("Save profile", type="primary", key="save_btn")
 
 if submitted:
     student = build_student(skills_df, certs_df, projects_df, events_df)
@@ -276,32 +283,36 @@ if submitted:
     st.rerun()
 
 
-
 def skill_area_section(student: Student) -> None:
-    """Area scores (0-100) with the evidence behind each one."""
+    """Area scores (0-100) as growing bars with level chips, plus the evidence behind each one."""
     ex = extract(student)
-    st.subheader("🧭 Skill areas")
-    st.caption("Calculated from your saved profile. Every point is traced back to its source. "
-               "Levels: Beginner below 30 · Intermediate 30–60 · Strong above 60.")
-    c1, c2 = st.columns([3, 2])
-    c1.plotly_chart(area_bar_figure(ex.scores), width="stretch", config={"displayModeBar": False})
-    with c2:
-        st.markdown("**Evidence**")
-        if not ex.evidence:
-            st.info("No evidence yet — add skills, certificates, projects or events.")
-        for area in sorted(ex.scores, key=lambda a: -ex.scores[a]):
-            items = ex.evidence_for(area)
-            if items:
-                with st.expander(f"{area_label(area)} — {ex.scores[area]:.0f}/100 · "
-                                 f"{area_level(ex.scores[area])} ({ex.raw[area]:g} pts)"):
-                    st.markdown("\n".join(f"- {e.text()}" for e in items))
+    with st.container(key="card-areas"):
+        section_title("Skill areas", "magnifier")
+        st.caption("Calculated from your saved profile. Every point is traced back to its source. "
+                   "Levels: Beginner below 30 · Intermediate 30–60 · Strong above 60 — "
+                   "they show room to grow, not pass/fail.")
+        c1, c2 = st.columns([3, 2], gap="large")
+        with c1:
+            order = sorted(skill_areas(), key=lambda a: -ex.scores[a])
+            html(skill_bars([(area_label(a), ex.scores[a], area_level(ex.scores[a])) for a in order],
+                            one_column=True))
+        with c2:
+            st.markdown("**Evidence**")
+            if not ex.evidence:
+                st.info("No evidence yet — add skills, certificates, projects or events.")
+            for area in sorted(ex.scores, key=lambda a: -ex.scores[a]):
+                items = ex.evidence_for(area)
+                if items:
+                    with st.expander(f"{area_label(area)} — {ex.scores[area]:.0f}/100 · "
+                                     f"{area_level(ex.scores[area])} ({ex.raw[area]:g} pts)"):
+                        st.markdown("\n".join(f"- {e.text()}" for e in items))
 
 
 if ss.editing:
-    if st.button("📊 See my career results", type="primary", key="to_results"):
+    if st.button("See my career results", type="primary", key="to_results"):
         ss.results_srn = ss.editing
         st.switch_page("views/2_Results.py")
     skill_area_section(ss.form_student)
-    with st.expander("🗑️ Delete this profile"):
+    with st.expander("Delete this profile", icon=":material/delete:"):
         sure = st.checkbox(f"Yes, permanently delete {ss.editing} and all its entries", key="del_ok")
         st.button("Delete profile", on_click=on_delete, disabled=not sure, type="secondary")

@@ -22,11 +22,16 @@ from .explain import RoleExplanation  # noqa: E402
 from .predict import Prediction, format_confidence  # noqa: E402
 from .skills import area_level  # noqa: E402
 
-NAVY = (11, 27, 59)
-BLUE = (76, 141, 255)
-GREY = (90, 100, 120)
-LIGHT = (232, 238, 249)
-LEVEL_RGB = {"Beginner": (120, 135, 165), "Intermediate": (76, 141, 255), "Strong": (34, 160, 100)}
+# Accent colours match the app's cream "doodle campus" tokens (src/career/ui.py); page stays white.
+INK = (30, 28, 26)
+BLUE = (47, 75, 201)
+GREY = (107, 103, 96)          # muted
+CREAM_2 = (239, 234, 221)
+LIME = (182, 240, 74)
+LIME_DARK = (125, 181, 26)
+# level chip: fill, text
+LEVEL_CHIP = {"Beginner": ((217, 211, 197), INK), "Intermediate": (BLUE, (255, 255, 255)),
+              "Strong": (LIME, INK)}
 FONT_DIR = Path(matplotlib.get_data_path()) / "fonts" / "ttf"
 
 
@@ -54,14 +59,15 @@ def radar_png(scores: dict[str, float], role: str, target: dict[str, float], yea
         return v + v[:1]
 
     fig, ax = plt.subplots(figsize=(5.2, 5.2), subplot_kw=dict(polar=True))
-    ax.plot(ang, closed(ideal), color="#E0A21B", lw=1.8, label=f"{role} (ideal)")
-    ax.fill(ang, closed(ideal), color="#F5B942", alpha=0.12)
-    ax.plot(ang, closed(target), color="#7A8AA8", lw=1.2, ls=":", label=f"Year-{year} target")
-    ax.plot(ang, closed(scores), color="#4C8DFF", lw=2.2, label="You")
-    ax.fill(ang, closed(scores), color="#4C8DFF", alpha=0.28)
+    ax.plot(ang, closed(ideal), color="#1E1C1A", lw=1.6, ls="--", label=f"{role} (ideal)")
+    ax.plot(ang, closed(target), color="#7DB51A", lw=1.6, label=f"Year-{year} target")
+    ax.plot(ang, closed(scores), color="#2F4BC9", lw=2.2, label="You")
+    ax.fill(ang, closed(scores), color="#2F4BC9", alpha=0.25)
     ax.set_xticks(ang[:-1], [area_label(a).replace(" & ", " &\n") for a in areas], fontsize=8)
     ax.set_ylim(0, 100)
-    ax.set_yticks([30, 60, 100], ["30", "60", "100"], fontsize=7, color="#7A8AA8")
+    ax.set_yticks([30, 60, 100], ["30", "60", "100"], fontsize=7, color="#6B6760")
+    ax.grid(color="#E6E0D2")
+    ax.spines["polar"].set_color("#E6E0D2")
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.08), ncol=3, fontsize=7.5, frameon=False)
     return _png(fig)
 
@@ -70,8 +76,8 @@ def gap_png(exp: RoleExplanation, year: int) -> io.BytesIO:
     gaps = list(reversed(exp.gaps))
     fig, ax = plt.subplots(figsize=(6.4, 0.55 * len(gaps) + 0.8))
     y = np.arange(len(gaps))
-    ax.barh(y, [g.target for g in gaps], color="#E6ECF7", edgecolor="#9FB2D6", label=f"Year-{year} target")
-    ax.barh(y, [g.score for g in gaps], height=0.5, color="#4C8DFF", label="You")
+    ax.barh(y, [g.target for g in gaps], color="#EFEADD", edgecolor="#CFC6B2", label=f"Year-{year} target")
+    ax.barh(y, [g.score for g in gaps], height=0.5, color="#2F4BC9", label="You")
     for i, g in enumerate(gaps):
         ax.text(max(g.target, g.score) + 1.5, i, f"gap {g.gap:.0f}", va="center", fontsize=8, color="#444")
     ax.set_yticks(y, [g.label for g in gaps], fontsize=8.5)
@@ -107,10 +113,10 @@ def _h(pdf: FPDF, text: str, size: float = 13) -> None:
         pdf.add_page()
     pdf.ln(3)
     pdf.set_font("DejaVu", "B", size)
-    pdf.set_text_color(*NAVY)
+    pdf.set_text_color(*INK)
     pdf.cell(0, 8, text, new_x="LMARGIN", new_y="NEXT")
-    pdf.set_draw_color(*BLUE)
-    pdf.set_line_width(0.5)
+    pdf.set_draw_color(*LIME_DARK)
+    pdf.set_line_width(1.1)
     pdf.line(pdf.l_margin, pdf.get_y(), pdf.l_margin + 30, pdf.get_y())
     pdf.ln(2)
 
@@ -162,15 +168,17 @@ def build_pdf(pred: Prediction, explanations: list[RoleExplanation]) -> bytes:
     pdf.add_page()
 
     # header band
-    pdf.set_fill_color(*NAVY)
+    pdf.set_fill_color(*INK)
     pdf.rect(0, 0, pdf.w, 30, "F")
+    pdf.set_fill_color(*LIME)
+    pdf.rect(0, 30, pdf.w, 1.6, "F")
     pdf.set_xy(15, 8)
     pdf.set_font("DejaVu", "B", 18)
     pdf.set_text_color(255, 255, 255)
     pdf.cell(0, 9, "Career Recommendation Report", new_x="LMARGIN", new_y="NEXT")
     pdf.set_x(15)
     pdf.set_font("DejaVu", "", 9)
-    pdf.set_text_color(*LIGHT)
+    pdf.set_text_color(*CREAM_2)
     pdf.cell(0, 6, f"Generated {date.today().strftime('%d %B %Y')}", new_x="LMARGIN", new_y="NEXT")
     pdf.set_y(36)
 
@@ -190,9 +198,9 @@ def build_pdf(pred: Prediction, explanations: list[RoleExplanation]) -> bytes:
     # top 3
     _h(pdf, "Top 3 roles")
     widths = (10, 80, 35, 55)
-    pdf.set_fill_color(*LIGHT)
+    pdf.set_fill_color(*CREAM_2)
     pdf.set_font("DejaVu", "B", 9)
-    pdf.set_text_color(*NAVY)
+    pdf.set_text_color(*INK)
     for w, t in zip(widths, ("#", "Role", "Skill match", "Model confidence")):
         pdf.cell(w, 7, t, fill=True)
     pdf.ln(7)
@@ -221,9 +229,17 @@ def build_pdf(pred: Prediction, explanations: list[RoleExplanation]) -> bytes:
         pdf.set_text_color(30, 35, 50)
         pdf.cell(44, 6.2, area_label(a))
         pdf.cell(12, 6.2, f"{sc:.0f}", align="R")
-        pdf.set_font("DejaVu", "B", 8)
-        pdf.set_text_color(*LEVEL_RGB[lv])
-        pdf.cell(26, 6.2, f"  {lv}", new_x="LMARGIN", new_y="NEXT")
+        fill, fg = LEVEL_CHIP[lv]
+        pdf.set_font("DejaVu", "B", 7.5)
+        x, y = pdf.get_x() + 2, pdf.get_y() + 1
+        pdf.set_fill_color(*fill)
+        pdf.set_draw_color(*(LIME_DARK if lv == "Strong" else fill))
+        pdf.set_line_width(0.3)
+        pdf.rect(x, y, 22, 4.4, "DF", round_corners=True, corner_radius=2.2)
+        pdf.set_text_color(*fg)
+        pdf.set_xy(x, y)
+        pdf.cell(22, 4.4, lv, align="C")
+        pdf.set_xy(pdf.l_margin, y - 1 + 6.2)
     _p(pdf, "Beginner < 30 · Intermediate 30–60 · Strong > 60", size=7.5, color=GREY)
     y1 = pdf.get_y()
     ideal = role_by_name(top.role)["profile"]
@@ -241,7 +257,7 @@ def build_pdf(pred: Prediction, explanations: list[RoleExplanation]) -> bytes:
             if idx == 1:
                 pdf.add_page()
                 _h(pdf, "Other strong options", 14)
-            _p(pdf, f"#{idx + 1} {e.role} — {r.match:.0f}% match", size=11, bold=True, color=NAVY)
+            _p(pdf, f"#{idx + 1} {e.role} — {r.match:.0f}% match", size=11, bold=True, color=INK)
         if not e.why:
             _bullet(pdf, "Not enough evidence yet — add projects, certificates or events in this area.")
         for w in e.why if idx == 0 else e.why[:2]:
@@ -265,14 +281,14 @@ def build_pdf(pred: Prediction, explanations: list[RoleExplanation]) -> bytes:
             _h(pdf, f"Next steps — {ns.stage_title}")
             for title, items in [("Certificates", ns.certificates), ("Projects", ns.projects),
                                  ("Events to attend", ns.events)]:
-                _p(pdf, title, size=10, bold=True, color=NAVY)
+                _p(pdf, title, size=10, bold=True, color=INK)
                 pdf.ln(1)
                 for step in items:
                     _checkbox(pdf, step.title, step.reason)
                 if not items:
                     _p(pdf, "You've already covered our suggestions here.", size=8.5, color=GREY)
                 pdf.ln(1)
-            _p(pdf, "Tips for your stage", size=10, bold=True, color=NAVY)
+            _p(pdf, "Tips for your stage", size=10, bold=True, color=INK)
             for tip in ns.tips:
                 _bullet(pdf, tip)
         else:
