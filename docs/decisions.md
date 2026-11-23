@@ -82,3 +82,4 @@
 | 78 | 7 | PDF keeps its white page and layout; accents are now ink (header band) + lime stripe/underlines + level chips matching the app | Spec |
 | 79 | 7 | **This Mac has "Reduce motion" on** (`com.apple.universalaccess reduceMotion = 1`), so the app shows no animation here by design; the motion tests emulate "no-preference" | Respecting the OS setting is a requirement, not a bug |
 | 80 | 7 | Tests: cream tokens, no navy colours left in code, reduced-motion block, WCAG AA for every text/background pair, assets + licences, doodle fill palette, no runtime DiceBear/Google Fonts URLs, stable avatar per SRN, animation budget | Guards the redesign rules |
+| 81 | 7 | Home demo picker shows **"Name — role"** (e.g. "Arjun Desai — ML/AI Engineer"), dropping the "(demo)" suffix because the field label already says "fictional" | User request: the long descriptions were cut off; the shorter label fits at 390 px |

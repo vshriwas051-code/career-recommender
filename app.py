@@ -36,7 +36,8 @@ def home() -> None:
             see_demo = st.button("See a demo", width="stretch", key="home_demo_btn")
         demos = {d.key: d for d in list_demos()}
         pick = st.selectbox("Demo student (fictional)", list(demos), key="home_demo",
-                            format_func=lambda k: f"{demos[k].student.name} — {demos[k].description}")
+                            format_func=lambda k: (f"{demos[k].student.name.removesuffix(' (demo)')} — "
+                                                   f"{demos[k].expected_role}"))
         if see_demo:
             student = install_demo(pick)
             st.session_state.results_srn = student.srn
