@@ -80,7 +80,7 @@ Regenerate with `python docs/make_architecture.py`.
 
 ## 4. Setup and run
 
-Needs **Python 3.11+** (developed and tested on 3.12) and Git.
+Needs **Python 3.11+** and Git. Tested from a fresh clone on Python 3.12 and 3.14 (macOS).
 
 **macOS / Linux**
 ```bash
