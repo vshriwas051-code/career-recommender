@@ -12,6 +12,7 @@ import streamlit as st  # noqa: E402
 from career import db  # noqa: E402
 from career.charts import area_bar_figure  # noqa: E402
 from career.config import app_config, area_label, skill_areas, skill_names  # noqa: E402
+from career.demo import install_demo, list_demos  # noqa: E402
 from career.models import Certificate, Event, Project, Student, _to_date  # noqa: E402
 from career.skills import area_level, extract, suggest_domain  # noqa: E402
 from career.ui import apply_style  # noqa: E402
@@ -73,6 +74,13 @@ def on_load() -> None:
 def on_new() -> None:
     fill_form(None)
     flash("info", "Started a new blank profile.")
+
+
+def on_load_demo() -> None:
+    student = install_demo(ss.demo_pick)
+    fill_form(db.get_student(student.srn))
+    flash("success", f"Loaded demo student {student.name} ({student.srn}). This is fictional data — "
+                     "edit it freely or open Results.")
 
 
 def on_delete() -> None:
@@ -148,6 +156,12 @@ c1.text_input("Load a saved profile by SRN", key="load_input", placeholder="e.g.
 c2.button("Load", on_click=on_load, width="stretch")
 c3.button("New profile", on_click=on_new, width="stretch")
 
+DEMOS = {d.key: d for d in list_demos()}
+d1, d2 = st.columns([3, 2], vertical_alignment="bottom")
+d1.selectbox("…or try a fictional demo student", list(DEMOS), key="demo_pick",
+             format_func=lambda k: f"{DEMOS[k].student.name} — {DEMOS[k].description}")
+d2.button("🎓 Load demo profile", on_click=on_load_demo, width="stretch", key="demo_btn")
+
 if "flash" in ss:
     kind, msg = ss.pop("flash")
     getattr(st, kind)(msg)
@@ -205,7 +219,7 @@ with st.form("profile_form", border=False):
             "platform": st.column_config.SelectboxColumn("Platform", options=cfg["certificate_platforms"],
                                                          default="Other"),
             "domain": st.column_config.SelectboxColumn(
-                "Domain", options=skill_areas(),
+                "Domain", options=skill_areas(), format_func=area_label, width="medium",
                 help="Leave blank and it is auto-detected from the title when you save."),
             "completion_date": st.column_config.DateColumn("Completed on", max_value=TODAY,
                                                            format="YYYY-MM-DD"),
@@ -238,7 +252,8 @@ with st.form("profile_form", border=False):
             "name": st.column_config.TextColumn("Event name *"),
             "event_type": st.column_config.SelectboxColumn("Type", options=cfg["event_types"],
                                                            default="Workshop"),
-            "theme": st.column_config.SelectboxColumn("Theme / domain", options=skill_areas()),
+            "theme": st.column_config.SelectboxColumn("Theme / domain", options=skill_areas(),
+                                                      format_func=area_label),
             "event_date": st.column_config.DateColumn("Date", max_value=TODAY, format="YYYY-MM-DD"),
             "participation": st.column_config.SelectboxColumn(
                 "Participation", options=cfg["participation_levels"], default="Attended"),

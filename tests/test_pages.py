@@ -137,3 +137,23 @@ def test_about_page_shows_metrics_and_synthetic_note():
     assert not at.exception
     assert "synthetic data" in at.warning[0].value
     assert any(m.label == "Top-3 accuracy" for m in at.metric)
+
+
+def test_load_demo_profile_button(temp_db):
+    at = _profile()
+    at.selectbox(key="demo_pick").select("security_4th_year").run()
+    at.button(key="demo_btn").click().run()
+    assert not at.exception
+    assert at.text_input(key="f_srn").value == "DEMO21SEC01"
+    assert at.text_input(key="f_srn").disabled                  # opened in edit mode
+    saved = db.get_student("DEMO21SEC01", db_path=temp_db)
+    assert saved and len(saved.events) == 4
+    # loading again refreshes it instead of failing as a duplicate
+    at.button(key="demo_btn").click().run()
+    assert not at.exception and len(db.list_students(db_path=temp_db)) == 1
+
+
+def test_home_page_renders_with_navigation():
+    at = _app("app.py").run()
+    assert not at.exception
+    assert any("AI Career Recommender" in m.value for m in at.markdown)

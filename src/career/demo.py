@@ -32,3 +32,11 @@ def load_demo(key: str) -> Demo:
         if d.key == key:
             return d
     raise KeyError(key)
+
+
+def install_demo(key: str, db_path=None) -> Student:
+    """Save (or refresh) a fictional demo student in the database and return it."""
+    from . import db
+    demo = load_demo(key)
+    db.save_student(demo.student, overwrite=True, db_path=db_path)
+    return demo.student

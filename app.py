@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
 import streamlit as st  # noqa: E402
 
+from career.demo import install_demo, list_demos  # noqa: E402
 from career.ui import apply_style, card  # noqa: E402
 
 st.set_page_config(page_title="Career Recommender", page_icon="🎯", layout="wide")
@@ -31,8 +32,20 @@ def home() -> None:
         card("2 · Results", "See your top-3 roles, why they fit, your gaps and what to do next.")
     with c3:
         card("3 · History", "Open or delete saved profiles by SRN.")
-    if st.button("Get started →", type="primary"):
-        st.switch_page("views/1_Profile.py")
+    g1, g2 = st.columns(2, vertical_alignment="bottom")
+    with g1:
+        st.markdown("**New here?** Enter your own profile.")
+        if st.button("Get started →", type="primary"):
+            st.switch_page("views/1_Profile.py")
+    with g2:
+        demos = {d.key: d for d in list_demos()}
+        pick = st.selectbox("…or see it work on a fictional demo student", list(demos), key="home_demo",
+                            format_func=lambda k: f"{demos[k].student.name} — {demos[k].description}")
+        if st.button("🎓 See demo results →", key="home_demo_btn"):
+            student = install_demo(pick)
+            st.session_state.results_srn = student.srn
+            st.session_state.pending_load = student.srn   # Profile page opens it too
+            st.switch_page("views/2_Results.py")
     st.caption("Everything runs offline — no paid APIs, no LLM calls.")
 
 

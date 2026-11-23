@@ -116,8 +116,9 @@ Keep it simple, working and well documented. A clean demo beats extra features.
 
 ```
 career-recommender/
-├── app.py                     Streamlit entry (multipage)
-├── pages/                     1_Profile.py, 2_Results.py, 3_History.py, 4_About.py
+├── app.py                     Streamlit entry: home page + st.navigation (registers views/)
+├── views/                     1_Profile.py, 2_Results.py, 3_History.py, 4_About.py
+│                              (not pages/ — a pages/ folder makes Streamlit bypass st.navigation on direct links)
 ├── src/career/
 │   ├── models.py              dataclasses: Student, Certificate, Project, Event
 │   ├── db.py                  SQLite schema + CRUD (students, certificates, projects, events)
