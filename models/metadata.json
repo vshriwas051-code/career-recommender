@@ -1,0 +1,71 @@
+{
+  "model_type": "LogisticRegression",
+  "model_version": "LogisticRegression-seed42-2026-11-24",
+  "seed": 42,
+  "training_rows": 2400,
+  "test_rows": 600,
+  "total_rows": 3000,
+  "test_size": 0.2,
+  "feature_names": [
+    "area_PROGRAMMING",
+    "area_WEB",
+    "area_MOBILE",
+    "area_DATA_ANALYSIS",
+    "area_ML_AI",
+    "area_CLOUD_DEVOPS",
+    "area_SECURITY",
+    "area_DESIGN_UX",
+    "area_EMBEDDED_IOT",
+    "area_BUSINESS_PRODUCT",
+    "year_of_study",
+    "cgpa",
+    "interest_building_apps",
+    "interest_working_with_data",
+    "interest_design",
+    "interest_security",
+    "interest_hardware",
+    "interest_business",
+    "interest_cloud_infrastructure",
+    "interest_ai_research"
+  ],
+  "classes": [
+    "Business/Product Analyst",
+    "Cloud/DevOps Engineer",
+    "Cybersecurity Analyst",
+    "Data Analyst",
+    "Data Scientist",
+    "Embedded/IoT Engineer",
+    "Full-Stack Web Developer",
+    "ML/AI Engineer",
+    "Mobile App Developer",
+    "Software Developer",
+    "UI/UX Designer"
+  ],
+  "metrics": {
+    "cv_accuracy": 0.8787,
+    "cv_accuracy_std": 0.0126,
+    "accuracy": 0.885,
+    "top3_accuracy": 0.9817,
+    "macro_f1": 0.8853
+  },
+  "comparison": {
+    "RandomForestClassifier": {
+      "cv_accuracy": 0.8596,
+      "cv_accuracy_std": 0.0109,
+      "accuracy": 0.8683,
+      "top3_accuracy": 0.98,
+      "macro_f1": 0.8682
+    },
+    "LogisticRegression": {
+      "cv_accuracy": 0.8787,
+      "cv_accuracy_std": 0.0126,
+      "accuracy": 0.885,
+      "top3_accuracy": 0.9817,
+      "macro_f1": 0.8853
+    }
+  },
+  "selection": "highest 5-fold CV accuracy on the training set",
+  "trained_on": "2026-11-24",
+  "sklearn_version": "1.9.1",
+  "data": "synthetic (career.synth) \u2014 no real student data"
+}

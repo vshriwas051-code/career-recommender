@@ -29,3 +29,11 @@
 | 25 | 2 | All 11 roles from the prompt are included (it says "about 10") | Each listed role is distinct and useful |
 | 26 | 2 | Certificate domain auto-suggest happens on save when the domain is left blank | `st.data_editor` cells can't react live to typing |
 | 27 | 2 | Area scores + evidence are shown on the Profile page for a saved profile | Meets the Phase 2 "done when" before the Results page exists |
+| 28 | 3 | Synthetic students are generated **at the same 0–100 scale `extract()` produces** (strength 15–45 % of the ideal in year 1, up to 45–100 % in year 4) | A model trained on idealised 80–90 scores would misjudge real profiles, which score ~25–60 |
+| 29 | 3 | Noise: per-area personal factor (sd 0.2), additive noise (sd 7), 35 % chance of a side-interest bump, interests ticked 75 % (role) / 10 % (other), 10 % missing CGPA | Gives overlapping, realistic classes; top-1 accuracy ~0.88 rather than a suspicious 1.0 |
+| 30 | 3 | Roles balanced (272–273 each of 3,000) | No real-world prior on role frequency; balance keeps macro F1 meaningful |
+| 31 | 3 | Model selection by 5-fold CV accuracy on the training set; the test set is only for final numbers | Picking on the test set would leak |
+| 32 | 3 | **LogisticRegression** selected (CV 0.879 vs RandomForest 0.860); both are reported | The prompt says keep the better one; LR is also smaller (3 KB) and easier to explain |
+| 33 | 3 | Trained model + metadata + reports are committed | A fresh clone runs without training; `PYTHONPATH=src python -m career.train` regenerates them identically |
+| 34 | 3 | Model tests evaluate the **committed** model on the regenerated test split | Proves the saved artifact meets top-3 ≥ 0.85, not just a fresh retrain |
+| 35 | 3 | Known for Phase 4: LR gives near-100 % confidence to clear-cut profiles | The cosine match score shown alongside keeps the result interpretable; revisit display if it looks odd |
