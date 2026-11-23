@@ -1,0 +1,63 @@
+# Skill taxonomy: skill -> skill area.
+# Phase 1 uses this list for the self-rated skills picker.
+# Phase 2 adds keyword -> skill mappings for certificates, projects and events.
+areas:
+  - PROGRAMMING
+  - WEB
+  - MOBILE
+  - DATA_ANALYSIS
+  - ML_AI
+  - CLOUD_DEVOPS
+  - SECURITY
+  - DESIGN_UX
+  - EMBEDDED_IOT
+  - BUSINESS_PRODUCT
+
+skills:
+  python: PROGRAMMING
+  java: PROGRAMMING
+  c/c++: PROGRAMMING
+  data structures & algorithms: PROGRAMMING
+  git: PROGRAMMING
+  html/css: WEB
+  javascript: WEB
+  react: WEB
+  node.js: WEB
+  django/flask: WEB
+  android: MOBILE
+  flutter: MOBILE
+  kotlin: MOBILE
+  swift/ios: MOBILE
+  sql: DATA_ANALYSIS
+  excel: DATA_ANALYSIS
+  pandas: DATA_ANALYSIS
+  power bi/tableau: DATA_ANALYSIS
+  statistics: DATA_ANALYSIS
+  machine learning: ML_AI
+  deep learning: ML_AI
+  nlp: ML_AI
+  computer vision: ML_AI
+  tensorflow/pytorch: ML_AI
+  aws: CLOUD_DEVOPS
+  azure: CLOUD_DEVOPS
+  gcp: CLOUD_DEVOPS
+  docker: CLOUD_DEVOPS
+  kubernetes: CLOUD_DEVOPS
+  linux: CLOUD_DEVOPS
+  ci/cd: CLOUD_DEVOPS
+  networking: SECURITY
+  ethical hacking: SECURITY
+  cryptography: SECURITY
+  web security: SECURITY
+  figma: DESIGN_UX
+  ui design: DESIGN_UX
+  ux research: DESIGN_UX
+  prototyping: DESIGN_UX
+  arduino: EMBEDDED_IOT
+  raspberry pi: EMBEDDED_IOT
+  embedded c: EMBEDDED_IOT
+  iot: EMBEDDED_IOT
+  communication: BUSINESS_PRODUCT
+  product management: BUSINESS_PRODUCT
+  business analysis: BUSINESS_PRODUCT
+  agile/scrum: BUSINESS_PRODUCT

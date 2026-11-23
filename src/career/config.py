@@ -19,3 +19,11 @@ def load_yaml(name: str) -> dict[str, Any]:
 
 def app_config() -> dict[str, Any]:
     return load_yaml("app.yaml")
+
+
+def skill_names() -> list[str]:
+    return list(load_yaml("skills.yaml").get("skills", {}).keys())
+
+
+def skill_areas() -> list[str]:
+    return list(load_yaml("skills.yaml").get("areas", []))
