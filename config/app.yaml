@@ -1,0 +1,22 @@
+# App-wide settings
+srn_pattern: "^[A-Z0-9]{6,15}$"   # uppercase letters and digits, 6-15 chars
+db_path: "data/career.db"
+year_min: 1
+year_max: 4
+cgpa_min: 0.0
+cgpa_max: 10.0
+
+certificate_platforms: [Coursera, NPTEL, AWS, Google, Udemy, Other]
+project_roles: [Solo, Team Lead, Team Member]
+project_types: [Academic, Personal, Hackathon, Internship]
+event_types: [Hackathon, Workshop, Seminar, Conference, Competition, Bootcamp]
+participation_levels: [Attended, Participant, Finalist, Winner]
+interests:
+  - Building apps
+  - Working with data
+  - Design
+  - Security
+  - Hardware
+  - Business
+  - Cloud & infrastructure
+  - AI & research

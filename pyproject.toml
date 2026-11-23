@@ -1,0 +1,9 @@
+[project]
+name = "career-recommender"
+version = "0.1.0"
+description = "AI career recommendation system for students (college mini-project)"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
