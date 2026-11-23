@@ -17,6 +17,19 @@ areas:
   - EMBEDDED_IOT
   - BUSINESS_PRODUCT
 
+# Display names for the areas
+area_labels:
+  PROGRAMMING: Programming
+  WEB: Web development
+  MOBILE: Mobile apps
+  DATA_ANALYSIS: Data analysis
+  ML_AI: Machine learning & AI
+  CLOUD_DEVOPS: Cloud & DevOps
+  SECURITY: Cybersecurity
+  DESIGN_UX: Design & UX
+  EMBEDDED_IOT: Embedded & IoT
+  BUSINESS_PRODUCT: Business & product
+
 # Evidence weights (section 2.2 of the master prompt).
 scoring:
   project: 3
@@ -214,6 +227,8 @@ keywords:
   computer networks: networking
   firewall: networking
   encryption: cryptography
+  sql injection: web security
+  xss: web security
   # DESIGN_UX
   ui/ux: ui design
   ux: ux research

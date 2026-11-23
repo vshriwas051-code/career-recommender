@@ -29,7 +29,11 @@ class Evidence:
 
     def text(self) -> str:
         """e.g. "CLOUD_DEVOPS +2 from certificate 'AWS Cloud Practitioner'"."""
-        return f"{self.area} +{self.points:g} from {SOURCE_LABELS[self.source_type]} '{self.source}'"
+        return f"{self.area} {self.short()}"
+
+    def short(self) -> str:
+        """e.g. "+2 from certificate 'AWS Cloud Practitioner'"."""
+        return f"+{self.points:g} from {SOURCE_LABELS[self.source_type]} '{self.source}'"
 
 
 @dataclass

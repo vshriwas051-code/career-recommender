@@ -20,3 +20,29 @@ interests:
   - Business
   - Cloud & infrastructure
   - AI & research
+
+# ---- Prediction display ----
+# The model's raw probabilities are very sharp for clear-cut profiles (often 99.9 %).
+# For display they are softened with temperature scaling, then capped.
+confidence_temperature: 4.0
+confidence_cap: 0.90
+confidence_bands: {high: 0.60, medium: 0.25}   # >= high -> High, >= medium -> Medium, else Low
+
+# ---- Year-of-study rules ----
+# Gaps are measured against the role's ideal profile scaled by what is reasonable
+# for the student's year (nobody is expected to be at the professional ideal in year 1).
+year_expectation: {1: 0.40, 2: 0.55, 3: 0.70, 4: 0.85}
+year_stage: {1: explore, 2: explore, 3: internship-ready, 4: internship-ready}
+stage_guidance:
+  explore:
+    title: "Explore — build fundamentals"
+    tips:
+      - "Get strong at programming basics and one core tool for this role."
+      - "Start with beginner-friendly certificates — they're quick wins that show direction."
+      - "Try workshops and seminars to sample different areas before you specialise."
+  internship-ready:
+    title: "Internship-ready — build proof"
+    tips:
+      - "Build 1–2 portfolio projects with a clear README, screenshots and a live demo link."
+      - "Practise interview questions for this role and solve problems regularly."
+      - "Update your résumé, GitHub and LinkedIn, and apply for internships early."

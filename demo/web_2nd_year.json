@@ -1,0 +1,29 @@
+{
+  "expected_role": "Full-Stack Web Developer",
+  "description": "2nd-year student strong in web development (fictional)",
+  "profile": {
+    "srn": "DEMO23WEB01",
+    "name": "Riya Menon (demo)",
+    "college": "Demo Institute of Technology",
+    "branch": "Computer Science",
+    "class_section": "3B",
+    "year_of_study": 2,
+    "cgpa": 8.1,
+    "interests": ["Building apps", "Design"],
+    "skills": {"html/css": 5, "javascript": 4, "react": 4, "node.js": 3, "git": 3, "python": 2, "figma": 2},
+    "certificates": [
+      {"title": "freeCodeCamp Responsive Web Design", "issuer": "freeCodeCamp", "platform": "Other", "domain": "WEB", "completion_date": "2025-04-12", "credential_url": ""},
+      {"title": "JavaScript Algorithms and Data Structures", "issuer": "freeCodeCamp", "platform": "Other", "domain": "WEB", "completion_date": "2025-09-03", "credential_url": ""},
+      {"title": "React Basics", "issuer": "Meta", "platform": "Coursera", "domain": "WEB", "completion_date": "2026-01-20", "credential_url": ""}
+    ],
+    "projects": [
+      {"title": "Personal portfolio website", "description": "Responsive portfolio built with HTML, CSS and JavaScript, hosted on GitHub Pages", "tech_stack": ["html/css", "javascript"], "role": "Solo", "project_type": "Personal", "github_url": ""},
+      {"title": "Campus canteen ordering app", "description": "React frontend with a Node.js and Express REST API and MongoDB", "tech_stack": ["react", "node.js"], "role": "Team Lead", "project_type": "Academic", "github_url": ""},
+      {"title": "Hackathon event-finder website", "description": "Full-stack web app listing college events", "tech_stack": ["react", "javascript"], "role": "Team Member", "project_type": "Hackathon", "github_url": ""}
+    ],
+    "events": [
+      {"name": "Web Dev Bootcamp", "event_type": "Bootcamp", "theme": "WEB", "event_date": "2025-06-15", "participation": "Participant"},
+      {"name": "Inter-college Hackathon", "event_type": "Hackathon", "theme": "WEB", "event_date": "2025-11-08", "participation": "Finalist"}
+    ]
+  }
+}

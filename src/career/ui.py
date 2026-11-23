@@ -15,6 +15,10 @@ _CSS = """
 .card:hover { transform: translateY(-2px); border-color: #4C8DFF; box-shadow: 0 6px 18px rgba(0,0,0,.35); }
 .card h3 { margin: 0 0 .35rem 0; }
 .muted { color: #9FB2D6; font-size: .92rem; }
+.role-card h3 { min-height: 2.6em; }
+.match-num { font-size: 2.6rem; font-weight: 700; color: #4C8DFF; line-height: 1.1; }
+.conf-bar { height: 6px; background: rgba(232,238,249,.12); border-radius: 3px; margin: .6rem 0 .3rem; }
+.conf-bar > div { height: 100%; background: #4C8DFF; border-radius: 3px; opacity: .75; }
 .hero { padding: 1.6rem 1.8rem; border-radius: 18px;
   background: linear-gradient(135deg, #12264F 0%, #0B1B3B 100%);
   border: 1px solid rgba(76,141,255,.3); margin-bottom: 1.2rem; }

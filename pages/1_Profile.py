@@ -11,7 +11,7 @@ import plotly.graph_objects as go  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from career import db  # noqa: E402
-from career.config import app_config, skill_areas, skill_names  # noqa: E402
+from career.config import app_config, area_label, skill_areas, skill_names  # noqa: E402
 from career.models import Certificate, Event, Project, Student, _to_date  # noqa: E402
 from career.skills import extract, suggest_domain  # noqa: E402
 from career.ui import apply_style  # noqa: E402
@@ -269,7 +269,7 @@ def skill_area_section(student: Student) -> None:
     st.caption("Calculated from your saved profile. Every point is traced back to its source.")
     order = sorted(ex.scores, key=lambda a: ex.scores[a])
     fig = go.Figure(go.Bar(
-        x=[ex.scores[a] for a in order], y=[a.replace("_", " ").title() for a in order],
+        x=[ex.scores[a] for a in order], y=[area_label(a) for a in order],
         orientation="h", marker_color="#4C8DFF",
         text=[f"{ex.scores[a]:g}" for a in order], textposition="outside",
         hovertemplate="%{y}: %{x:.0f}/100<extra></extra>"))
@@ -285,12 +285,15 @@ def skill_area_section(student: Student) -> None:
         for area in sorted(ex.scores, key=lambda a: -ex.scores[a]):
             items = ex.evidence_for(area)
             if items:
-                with st.expander(f"{area.replace('_', ' ').title()} — {ex.scores[area]:g}/100 "
+                with st.expander(f"{area_label(area)} — {ex.scores[area]:g}/100 "
                                  f"({ex.raw[area]:g} pts)"):
                     st.markdown("\n".join(f"- {e.text()}" for e in items))
 
 
 if ss.editing:
+    if st.button("📊 See my career results", type="primary", key="to_results"):
+        ss.results_srn = ss.editing
+        st.switch_page("pages/2_Results.py")
     skill_area_section(ss.form_student)
     with st.expander("🗑️ Delete this profile"):
         sure = st.checkbox(f"Yes, permanently delete {ss.editing} and all its entries", key="del_ok")

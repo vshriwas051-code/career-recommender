@@ -39,3 +39,14 @@ def roles() -> list[dict[str, Any]]:
 
 def role_names() -> list[str]:
     return [r["name"] for r in roles()]
+
+
+def area_label(area: str) -> str:
+    return load_yaml("skills.yaml").get("area_labels", {}).get(area, area.replace("_", " ").title())
+
+
+def role_by_name(name: str) -> dict[str, Any]:
+    for r in roles():
+        if r["name"] == name:
+            return r
+    raise KeyError(name)

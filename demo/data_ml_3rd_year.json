@@ -1,0 +1,31 @@
+{
+  "expected_role": "ML/AI Engineer",
+  "description": "3rd-year student strong in data and machine learning, with AWS certificates (fictional)",
+  "profile": {
+    "srn": "DEMO22ML001",
+    "name": "Arjun Desai (demo)",
+    "college": "Demo Institute of Technology",
+    "branch": "Artificial Intelligence & Data Science",
+    "class_section": "5A",
+    "year_of_study": 3,
+    "cgpa": 8.7,
+    "interests": ["AI & research", "Working with data", "Cloud & infrastructure"],
+    "skills": {"python": 5, "machine learning": 4, "deep learning": 3, "tensorflow/pytorch": 3, "pandas": 4, "sql": 3, "statistics": 3, "aws": 3, "docker": 2},
+    "certificates": [
+      {"title": "Machine Learning Specialization", "issuer": "DeepLearning.AI / Stanford", "platform": "Coursera", "domain": "ML_AI", "completion_date": "2025-02-10", "credential_url": ""},
+      {"title": "Deep Learning Specialization", "issuer": "DeepLearning.AI", "platform": "Coursera", "domain": "ML_AI", "completion_date": "2025-08-22", "credential_url": ""},
+      {"title": "AWS Certified Cloud Practitioner", "issuer": "Amazon Web Services", "platform": "AWS", "domain": "CLOUD_DEVOPS", "completion_date": "2025-05-30", "credential_url": ""},
+      {"title": "AWS Certified Machine Learning – Specialty", "issuer": "Amazon Web Services", "platform": "AWS", "domain": "ML_AI", "completion_date": "2026-03-14", "credential_url": ""}
+    ],
+    "projects": [
+      {"title": "Crop disease detection", "description": "Image classification with a CNN in PyTorch on leaf photos", "tech_stack": ["python", "tensorflow/pytorch", "computer vision"], "role": "Team Lead", "project_type": "Academic", "github_url": ""},
+      {"title": "Customer churn prediction", "description": "Feature engineering with pandas and scikit-learn models, deployed as an API on AWS", "tech_stack": ["python", "pandas", "machine learning", "aws"], "role": "Solo", "project_type": "Internship", "github_url": ""},
+      {"title": "Course-notes chatbot", "description": "NLP chatbot answering questions over lecture notes", "tech_stack": ["python", "nlp"], "role": "Team Member", "project_type": "Hackathon", "github_url": ""}
+    ],
+    "events": [
+      {"name": "AI/ML Hackathon", "event_type": "Hackathon", "theme": "ML_AI", "event_date": "2025-10-04", "participation": "Winner"},
+      {"name": "AWS Community Day", "event_type": "Conference", "theme": "CLOUD_DEVOPS", "event_date": "2025-09-13", "participation": "Attended"},
+      {"name": "Kaggle Days Meetup", "event_type": "Workshop", "theme": "ML_AI", "event_date": "2026-02-07", "participation": "Participant"}
+    ]
+  }
+}

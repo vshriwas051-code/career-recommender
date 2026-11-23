@@ -1,0 +1,31 @@
+{
+  "expected_role": "Cybersecurity Analyst",
+  "description": "4th-year student into security, with CTF events (fictional)",
+  "profile": {
+    "srn": "DEMO21SEC01",
+    "name": "Kabir Sharma (demo)",
+    "college": "Demo Institute of Technology",
+    "branch": "Information Science",
+    "class_section": "7C",
+    "year_of_study": 4,
+    "cgpa": 7.6,
+    "interests": ["Security", "Cloud & infrastructure"],
+    "skills": {"networking": 4, "ethical hacking": 4, "linux": 4, "web security": 3, "cryptography": 3, "python": 3},
+    "certificates": [
+      {"title": "Google Cybersecurity Professional Certificate", "issuer": "Google", "platform": "Coursera", "domain": "SECURITY", "completion_date": "2024-12-01", "credential_url": ""},
+      {"title": "CompTIA Security+", "issuer": "CompTIA", "platform": "Other", "domain": "SECURITY", "completion_date": "2025-07-19", "credential_url": ""},
+      {"title": "Cisco CCNA: Introduction to Networks", "issuer": "Cisco", "platform": "Other", "domain": "SECURITY", "completion_date": "2025-03-05", "credential_url": ""}
+    ],
+    "projects": [
+      {"title": "Home security lab", "description": "Network scanning and traffic analysis with Nmap and Wireshark on a Kali Linux VM", "tech_stack": ["linux", "networking"], "role": "Solo", "project_type": "Personal", "github_url": ""},
+      {"title": "Web vulnerability audit of OWASP Juice Shop", "description": "Found and documented XSS and SQL injection issues using Burp Suite", "tech_stack": ["web security"], "role": "Team Lead", "project_type": "Academic", "github_url": ""},
+      {"title": "CTF write-ups blog", "description": "Write-ups for 15 solved capture the flag challenges (crypto, forensics, web)", "tech_stack": ["cryptography"], "role": "Solo", "project_type": "Personal", "github_url": ""}
+    ],
+    "events": [
+      {"name": "National CTF Championship", "event_type": "Competition", "theme": "SECURITY", "event_date": "2025-08-23", "participation": "Finalist"},
+      {"name": "College CTF Night", "event_type": "Competition", "theme": "SECURITY", "event_date": "2025-02-15", "participation": "Winner"},
+      {"name": "Ethical Hacking Workshop", "event_type": "Workshop", "theme": "SECURITY", "event_date": "2024-09-28", "participation": "Attended"},
+      {"name": "Cyber Security Summit", "event_type": "Conference", "theme": "SECURITY", "event_date": "2025-11-20", "participation": "Attended"}
+    ]
+  }
+}

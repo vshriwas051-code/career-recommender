@@ -35,7 +35,7 @@ roles:
       - {name: "Coursera HTML, CSS and JavaScript for Web Developers", area: WEB, level: beginner}
       - {name: "Meta Front-End Developer (Coursera)", area: WEB, level: advanced}
       - {name: "Meta Back-End Developer (Coursera)", area: WEB, level: advanced}
-      - {name: "AWS Certified Cloud Practitioner", area: CLOUD_DEVOPS, level: advanced}
+      - {name: "AWS Certified Cloud Practitioner", area: CLOUD_DEVOPS, level: beginner}
     projects:
       - {title: "Responsive landing page with HTML/CSS", area: WEB, level: beginner}
       - {title: "To-do app in React with local storage", area: WEB, level: beginner}

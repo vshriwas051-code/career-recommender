@@ -103,8 +103,28 @@ def test_profile_shows_area_scores_and_suggests_domain(temp_db, full_student):
     at.button[0].click().run()
     assert any("Skill areas" in h.value for h in at.subheader)
     labels = [e.label for e in at.expander]
-    assert any(l.startswith("Cloud Devops") for l in labels)
+    assert any(l.startswith("Cloud & DevOps") for l in labels)
     md = " ".join(m.value for m in at.markdown)
     assert "CLOUD_DEVOPS +2 from certificate 'AWS Cloud Practitioner'" in md
     _save(at)
     assert db.get_student(full_student.srn, db_path=temp_db).certificates[0].domain == "CLOUD_DEVOPS"
+
+
+def test_results_page_shows_match_first_and_logs_once(temp_db):
+    from career.demo import load_demo
+    demo = load_demo("web_2nd_year")
+    db.save_student(demo.student, db_path=temp_db)
+    at = _app("pages/2_Results.py").run()
+    assert not at.exception
+    html = " ".join(m.value for m in at.markdown)
+    assert demo.expected_role in html
+    assert "skill match" in html and 'class="match-num"' in html
+    assert "Model confidence: 100%" not in html
+    assert len(at.tabs) == 3
+    at.run()  # rerun must not log a duplicate prediction
+    assert len(db.list_predictions(demo.student.srn, db_path=temp_db)) == 1
+
+
+def test_results_page_without_profiles(temp_db):
+    at = _app("pages/2_Results.py").run()
+    assert not at.exception and "No saved profiles" in at.info[0].value

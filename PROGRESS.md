@@ -6,8 +6,8 @@
 | 1 Profile & storage | ✅ Done | models/db/validate; Profile page (basic details, skills, interests, certificate/project/event lists) with inline validation; History page (open/delete by SRN); 36 tests |
 | 2 Skill extraction | ✅ Done | skills.yaml keywords + scoring weights, roles.yaml (11 roles), skills.py (evidence trail), features.py (20 features); certificate-domain auto-suggest; Profile page shows area scores + evidence; 64 tests |
 | 3 Model | ✅ Done | synth.py (3,000 synthetic students, seed 42), train.py (RF vs LR, CV selection → LogisticRegression); test accuracy 0.885, **top-3 0.982**, macro F1 0.885; reports/model_evaluation.md + confusion_matrix.png; 75 tests |
-| 4 Prediction & advice | ⏳ Next | predict.py, explain.py, year rules, predictions history |
-| 5 Results UI & PDF | — | |
+| 4 Prediction & advice | ✅ Done | predict.py (top-3, cosine match, softened/capped confidence ≤ 90 %), explain.py (why / year-adjusted gaps / next steps), 3 fictional demo profiles all predict their expected role, prediction history logged, basic Results page (match-first cards); 101 tests |
+| 5 Results UI & PDF | ⏳ Next | Radar + gap charts, polish/animations, PDF download, About page |
 | 6 Polish & submit | — | |
 
 ## Run
