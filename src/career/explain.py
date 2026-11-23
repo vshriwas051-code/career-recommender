@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from .config import app_config, area_label, role_by_name, roles, skill_areas
 from .models import Student
 from .predict import Prediction, predict
-from .skills import Extraction
+from .skills import Extraction, area_level
 
 RELEVANT_IDEAL = 25     # an area matters to a role if its ideal score is at least this
 MIN_WHY_SCORE = 20      # a student's area must be at least this to count as a reason
@@ -25,7 +25,8 @@ class WhyItem:
     evidence: list[str]
 
     def headline(self) -> str:
-        return f"{self.label} — you score {self.score:g}/100 (role ideal {self.ideal:g})"
+        return (f"{self.label} — you score {self.score:.0f}/100 · {area_level(self.score)} "
+                f"(role ideal {self.ideal:g})")
 
 
 @dataclass

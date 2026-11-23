@@ -150,3 +150,12 @@ def extract(student: Student) -> Extraction:
 def normalise(raw: dict[str, float], cap: float) -> dict[str, float]:
     """Map raw points to 0-100 on an absolute scale: `cap` points or more = 100."""
     return {a: round(min(100.0, 100.0 * v / cap), 1) for a, v in raw.items()}
+
+
+def area_level(score: float) -> str:
+    """Friendly level for a 0-100 area score: Beginner (<30), Intermediate (30-60), Strong (>60)."""
+    from .config import app_config
+    lv = app_config()["skill_levels"]
+    if score < lv["beginner_below"]:
+        return "Beginner"
+    return "Strong" if score > lv["strong_above"] else "Intermediate"

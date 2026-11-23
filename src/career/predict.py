@@ -48,6 +48,11 @@ def soften(proba: np.ndarray, temperature: float, cap: float) -> np.ndarray:
     return np.minimum(p / p.sum(), cap)
 
 
+def format_confidence(conf: float) -> str:
+    """Display string: never "0%" (reads as broken) and never above the cap."""
+    return "<1%" if conf < 0.005 else f"{conf * 100:.0f}%"
+
+
 def confidence_label(conf: float) -> str:
     bands = app_config()["confidence_bands"]
     return "High" if conf >= bands["high"] else "Medium" if conf >= bands["medium"] else "Low"

@@ -7,13 +7,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from datetime import date  # noqa: E402
 
 import pandas as pd  # noqa: E402
-import plotly.graph_objects as go  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from career import db  # noqa: E402
+from career.charts import area_bar_figure  # noqa: E402
 from career.config import app_config, area_label, skill_areas, skill_names  # noqa: E402
 from career.models import Certificate, Event, Project, Student, _to_date  # noqa: E402
-from career.skills import extract, suggest_domain  # noqa: E402
+from career.skills import area_level, extract, suggest_domain  # noqa: E402
 from career.ui import apply_style  # noqa: E402
 from career.validate import normalize_srn, validate_student  # noqa: E402
 
@@ -266,18 +266,10 @@ def skill_area_section(student: Student) -> None:
     """Area scores (0-100) with the evidence behind each one."""
     ex = extract(student)
     st.subheader("🧭 Skill areas")
-    st.caption("Calculated from your saved profile. Every point is traced back to its source.")
-    order = sorted(ex.scores, key=lambda a: ex.scores[a])
-    fig = go.Figure(go.Bar(
-        x=[ex.scores[a] for a in order], y=[area_label(a) for a in order],
-        orientation="h", marker_color="#4C8DFF",
-        text=[f"{ex.scores[a]:g}" for a in order], textposition="outside",
-        hovertemplate="%{y}: %{x:.0f}/100<extra></extra>"))
-    fig.update_layout(height=360, margin=dict(l=10, r=30, t=10, b=10), xaxis_range=[0, 108],
-                      paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                      font_color="#E8EEF9", xaxis_title="Score (0–100)")
+    st.caption("Calculated from your saved profile. Every point is traced back to its source. "
+               "Levels: Beginner below 30 · Intermediate 30–60 · Strong above 60.")
     c1, c2 = st.columns([3, 2])
-    c1.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
+    c1.plotly_chart(area_bar_figure(ex.scores), width="stretch", config={"displayModeBar": False})
     with c2:
         st.markdown("**Evidence**")
         if not ex.evidence:
@@ -285,15 +277,15 @@ def skill_area_section(student: Student) -> None:
         for area in sorted(ex.scores, key=lambda a: -ex.scores[a]):
             items = ex.evidence_for(area)
             if items:
-                with st.expander(f"{area_label(area)} — {ex.scores[area]:g}/100 "
-                                 f"({ex.raw[area]:g} pts)"):
+                with st.expander(f"{area_label(area)} — {ex.scores[area]:.0f}/100 · "
+                                 f"{area_level(ex.scores[area])} ({ex.raw[area]:g} pts)"):
                     st.markdown("\n".join(f"- {e.text()}" for e in items))
 
 
 if ss.editing:
     if st.button("📊 See my career results", type="primary", key="to_results"):
         ss.results_srn = ss.editing
-        st.switch_page("pages/2_Results.py")
+        st.switch_page("views/2_Results.py")
     skill_area_section(ss.form_student)
     with st.expander("🗑️ Delete this profile"):
         sure = st.checkbox(f"Yes, permanently delete {ss.editing} and all its entries", key="del_ok")

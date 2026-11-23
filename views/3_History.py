@@ -39,7 +39,7 @@ c1, c2 = st.columns(2)
 with c1:
     if st.button("📂 Open in Profile", type="primary", width="stretch", key="hist_open"):
         ss.pending_load = srn
-        st.switch_page("pages/1_Profile.py")
+        st.switch_page("views/1_Profile.py")
 with c2:
     sure = st.checkbox(f"Confirm delete of {srn}", key="hist_del_ok")
     if st.button("🗑️ Delete", disabled=not sure, width="stretch", key="hist_delete"):

@@ -17,7 +17,7 @@ def temp_db(db_path, monkeypatch):
 
 
 def _profile():
-    at = _app("pages/1_Profile.py").run()
+    at = _app("views/1_Profile.py").run()
     assert not at.exception
     return at
 
@@ -39,8 +39,8 @@ def _save(at):
 
 
 def test_home_and_all_pages_render():
-    for f in ["app.py", "pages/1_Profile.py", "pages/2_Results.py", "pages/3_History.py",
-              "pages/4_About.py"]:
+    for f in ["app.py", "views/1_Profile.py", "views/2_Results.py", "views/3_History.py",
+              "views/4_About.py"]:
         assert not _app(f).run().exception, f
 
 
@@ -87,7 +87,7 @@ def test_load_edit_and_delete(temp_db, full_student):
 
 def test_history_lists_and_deletes(temp_db, full_student):
     db.save_student(full_student, db_path=temp_db)
-    at = _app("pages/3_History.py").run()
+    at = _app("views/3_History.py").run()
     assert full_student.srn in at.dataframe[0].value["SRN"].tolist()
     at.checkbox(key="hist_del_ok").check().run()
     at.button(key="hist_delete").click().run()
@@ -114,17 +114,26 @@ def test_results_page_shows_match_first_and_logs_once(temp_db):
     from career.demo import load_demo
     demo = load_demo("web_2nd_year")
     db.save_student(demo.student, db_path=temp_db)
-    at = _app("pages/2_Results.py").run()
+    at = _app("views/2_Results.py").run()
     assert not at.exception
     html = " ".join(m.value for m in at.markdown)
     assert demo.expected_role in html
     assert "skill match" in html and 'class="match-num"' in html
     assert "Model confidence: 100%" not in html
     assert len(at.tabs) == 3
+    assert "chip-Strong" in html and "chip-Beginner" in html          # level labels shown
+    assert at.get("download_button")[0].proto.label == "⬇️ Download PDF report"
     at.run()  # rerun must not log a duplicate prediction
     assert len(db.list_predictions(demo.student.srn, db_path=temp_db)) == 1
 
 
 def test_results_page_without_profiles(temp_db):
-    at = _app("pages/2_Results.py").run()
+    at = _app("views/2_Results.py").run()
     assert not at.exception and "No saved profiles" in at.info[0].value
+
+
+def test_about_page_shows_metrics_and_synthetic_note():
+    at = _app("views/4_About.py").run()
+    assert not at.exception
+    assert "synthetic data" in at.warning[0].value
+    assert any(m.label == "Top-3 accuracy" for m in at.metric)

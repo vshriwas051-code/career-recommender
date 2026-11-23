@@ -49,3 +49,13 @@
 | 45 | 4 | Demo profiles created now (`demo/*.json`, loader in `src/career/demo.py`); the "Load demo profile" button stays in Phase 6 | Phase 4's "done when" needs them; a loader in `src/` is importable by pages and tests |
 | 46 | 4 | A prediction is logged to history each time the Results page shows a **new version** of a profile (once per session per profile hash) | Append-only history without duplicate rows on every rerun |
 | 47 | 4 | Basic Results page built now (cards, why, gaps table, next-steps checklist, history); charts, radar, animations and PDF in Phase 5 | Lets Phase 4 be checked in the app |
+| 48 | 5 | **Level labels** next to every area score: Beginner < 30, Intermediate 30–60, Strong > 60 (`skill_levels` in app.yaml). Shown on Profile (bar colours + text), Results (overview chips, why, gap chart), PDF | User request: low numbers shouldn't read as failures. Chip colours are slate/blue/green, deliberately no red |
+| 49 | 5 | Radar per role tab shows **You vs role ideal vs year-N target** | The target line explains where the gap numbers come from |
+| 50 | 5 | Gap chart = You (bar) over the year target (outline), biggest gap at the top | Matches the gap rule; readable without a legend lookup |
+| 51 | 5 | Confidence under 0.5 % shows as "<1%", never "0%" | "0%" looks like a bug |
+| 52 | 5 | PDF uses fpdf2 + matplotlib charts + the **DejaVu Sans font bundled with matplotlib** | Core PDF fonts can't print "—", "·" or accents; no extra dependency or download |
+| 53 | 5 | PDF: page 1 summary/top-3/areas+radar, page 2 top-role why/gaps/next-steps checklist, page 3 other two roles + method note | Same content as the Results page, laid out for print (white background) |
+| 54 | 5 | PDF bytes cached per session per profile version | `st.download_button` needs the bytes up front; avoids rebuilding on every rerun |
+| 55 | 5 | **`app.py` uses `st.navigation`**, and the page folder is renamed **`pages/` → `views/`** | Classic multipage labelled the home page "app". With `st.navigation` plus a folder named `pages/`, direct links (e.g. /Results) bypassed the new navigation. Renaming fixes both; `streamlit run app.py` is unchanged |
+| 56 | 5 | About page: synthetic-data warning first, pipeline diagram (Graphviz DOT, rendered in the browser), weights, live metrics from metadata.json, confusion matrix, how to read the cards, limitations | Matches section 2.5 / 5 of the prompt |
+| 57 | 5 | Animations kept light: page fade-in, staggered role-card fade-in, confidence bar grows, card hover lift | "Don't overdo it" |

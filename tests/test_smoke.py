@@ -25,7 +25,7 @@ def test_navy_theme():
 
 def test_pages_exist():
     for name in ["1_Profile", "2_Results", "3_History", "4_About"]:
-        assert (ROOT / "pages" / f"{name}.py").exists()
+        assert (ROOT / "views" / f"{name}.py").exists()
 
 
 def test_gitignore_excludes_data():

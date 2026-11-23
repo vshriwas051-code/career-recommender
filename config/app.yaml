@@ -46,3 +46,7 @@ stage_guidance:
       - "Build 1–2 portfolio projects with a clear README, screenshots and a live demo link."
       - "Practise interview questions for this role and solve problems regularly."
       - "Update your résumé, GitHub and LinkedIn, and apply for internships early."
+
+# ---- Skill-area level labels (shown next to every area score) ----
+# score < beginner_below -> Beginner; up to strong_above -> Intermediate; above -> Strong
+skill_levels: {beginner_below: 30, strong_above: 60}

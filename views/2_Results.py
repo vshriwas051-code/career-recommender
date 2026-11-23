@@ -1,4 +1,4 @@
-"""Results page: top-3 roles (match score first), why, gaps and next steps."""
+"""Results page: top-3 roles (match score first), skill levels, radar, why, gaps, next steps, PDF."""
 import sys
 from pathlib import Path
 
@@ -12,15 +12,19 @@ import pandas as pd  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from career import db  # noqa: E402
-from career.config import app_config  # noqa: E402
+from career.charts import gap_figure, radar_figure  # noqa: E402
+from career.config import app_config, area_label, role_by_name, skill_areas  # noqa: E402
 from career.explain import recommend  # noqa: E402
-from career.predict import save_prediction  # noqa: E402
-from career.ui import apply_style  # noqa: E402
+from career.predict import format_confidence, save_prediction  # noqa: E402
+from career.report import build_pdf, report_filename  # noqa: E402
+from career.skills import area_level  # noqa: E402
+from career.ui import apply_style, level_chip  # noqa: E402
 
 st.set_page_config(page_title="Results", page_icon="📊", layout="wide")
 apply_style()
 ss = st.session_state
 cfg = app_config()
+PLOT_CFG = {"displayModeBar": False}
 
 st.title("📊 Career Results")
 
@@ -42,6 +46,9 @@ try:
 except FileNotFoundError as exc:
     st.error(f"{exc}")
     st.stop()
+ex = pred.extraction
+year = student.year_of_study
+expect = cfg["year_expectation"][year]
 
 # Log each distinct profile version once per session (history is append-only).
 profile_hash = hashlib.sha1(json.dumps(student.to_dict(), sort_keys=True).encode()).hexdigest()
@@ -50,16 +57,25 @@ if (srn, profile_hash) not in logged:
     save_prediction(pred)
     logged.add((srn, profile_hash))
 
-# ---------- student summary ----------
-stage = cfg["stage_guidance"][cfg["year_stage"][student.year_of_study]]["title"]
+# ---------- student summary + PDF ----------
+stage = cfg["stage_guidance"][cfg["year_stage"][year]]["title"]
 cgpa = f" · CGPA {student.cgpa:g}" if student.cgpa is not None else ""
-st.markdown(
-    f'<div class="card"><h3>{escape(student.name)}</h3><div class="muted">'
-    f'SRN {escape(student.srn)} · {escape(student.college)}'
-    f'{" · " + escape(student.branch) if student.branch else ""}'
-    f'{" · Class " + escape(student.class_section) if student.class_section else ""}'
-    f' · Year {student.year_of_study}{cgpa}<br>Stage: <b>{escape(stage)}</b></div></div>',
-    unsafe_allow_html=True)
+c_sum, c_pdf = st.columns([4, 1], vertical_alignment="center")
+with c_sum:
+    st.markdown(
+        f'<div class="card"><h3>{escape(student.name)}</h3><div class="muted">'
+        f'SRN {escape(student.srn)} · {escape(student.college)}'
+        f'{" · " + escape(student.branch) if student.branch else ""}'
+        f'{" · Class " + escape(student.class_section) if student.class_section else ""}'
+        f' · Year {year}{cgpa}<br>Stage: <b>{escape(stage)}</b></div></div>',
+        unsafe_allow_html=True)
+with c_pdf:
+    pdf_cache = ss.setdefault("pdf_cache", {})
+    if (srn, profile_hash) not in pdf_cache:
+        pdf_cache[(srn, profile_hash)] = build_pdf(pred, explanations)
+    st.download_button("⬇️ Download PDF report", pdf_cache[(srn, profile_hash)],
+                       file_name=report_filename(srn), mime="application/pdf",
+                       type="primary", width="stretch", key="pdf_dl")
 
 # ---------- top-3 role cards ----------
 st.subheader("Your top 3 roles")
@@ -67,13 +83,13 @@ cols = st.columns(3)
 for i, (col, r) in enumerate(zip(cols, pred.top), 1):
     with col:
         st.markdown(
-            f'<div class="card role-card">'
+            f'<div class="card role-card r{i}">'
             f'<div class="muted">#{i}</div>'
             f'<h3>{escape(r.role)}</h3>'
             f'<div class="match-num">{r.match:.0f}%</div>'
             f'<div class="muted">skill match</div>'
             f'<div class="conf-bar"><div style="width:{r.confidence * 100:.0f}%"></div></div>'
-            f'<div class="muted">Model confidence: {r.confidence * 100:.0f}% · {r.confidence_label}</div>'
+            f'<div class="muted">Model confidence: {format_confidence(r.confidence)} · {r.confidence_label}</div>'
             f'<p class="muted" style="margin-top:.6rem">{escape(r.summary)}</p></div>',
             unsafe_allow_html=True)
 st.caption(
@@ -81,29 +97,49 @@ st.caption(
     "(cosine similarity). **Model confidence** = the trained model's estimate, softened and capped at "
     f"{cfg['confidence_cap'] * 100:.0f}% because no prediction is ever certain. Roles are ranked by the model.")
 
-# ---------- per-role explanation ----------
+# ---------- skill-area overview with level labels ----------
+st.subheader("Your skill areas")
+lv = cfg["skill_levels"]
+st.caption(f"Levels: **Beginner** below {lv['beginner_below']} · **Intermediate** "
+           f"{lv['beginner_below']}–{lv['strong_above']} · **Strong** above {lv['strong_above']}. "
+           "Everyone starts as a beginner somewhere — these show where to grow, not pass/fail.")
+ordered = sorted(skill_areas(), key=lambda a: -ex.scores[a])
+half = (len(ordered) + 1) // 2
+for col, chunk in zip(st.columns(2), (ordered[:half], ordered[half:])):
+    with col:
+        st.markdown('<div class="card">' + "".join(
+            f'<div class="area-row"><span>{escape(area_label(a))}</span>'
+            f'<span><b>{ex.scores[a]:.0f}</b>{level_chip(area_level(ex.scores[a]))}</span></div>'
+            for a in chunk) + "</div>", unsafe_allow_html=True)
+
+# ---------- per-role detail ----------
+st.subheader("Role details")
 tabs = st.tabs([f"#{i} {e.role}" for i, e in enumerate(explanations, 1)])
 for t_idx, (tab, e) in enumerate(zip(tabs, explanations)):
     with tab:
-        c1, c2 = st.columns(2)
+        ideal = role_by_name(e.role)["profile"]
+        target = {a: round(ideal[a] * expect, 1) for a in skill_areas()}
+        c1, c2 = st.columns([1, 1])
         with c1:
+            st.markdown(f"#### 🧭 You vs {escape(e.role)}")
+            st.plotly_chart(radar_figure(ex.scores, e.role, ideal, target, year),
+                            width="stretch", config=PLOT_CFG, key=f"radar_{t_idx}")
+        with c2:
             st.markdown("#### ✅ Why this role")
             if not e.why:
                 st.info("Not enough evidence yet — add projects, certificates or events in this area.")
             for w in e.why:
-                st.markdown(f"**{escape(w.headline())}**")
+                st.markdown(f"**{escape(w.label)}** — {w.score:.0f}/100 {level_chip(area_level(w.score))} "
+                            f'<span class="muted">(role ideal {w.ideal:g})</span>', unsafe_allow_html=True)
                 st.markdown("\n".join(f"- {escape(x)}" for x in w.evidence[:5]))
-        with c2:
-            st.markdown("#### 📉 Skill gaps")
-            if not e.gaps:
-                st.success(f"No significant gaps — you meet the year-{student.year_of_study} target "
-                           "in every area this role relies on.")
-            else:
-                st.caption(f"Compared with what's reasonable for year {student.year_of_study} "
-                           f"({cfg['year_expectation'][student.year_of_study] * 100:.0f}% of the role's ideal).")
-                st.dataframe(pd.DataFrame([{"Area": g.label, "You": g.score, "Target": g.target,
-                                            "Gap": g.gap} for g in e.gaps]),
-                             hide_index=True, width="stretch")
+
+        st.markdown("#### 📉 Skill gaps")
+        if not e.gaps:
+            st.success(f"No significant gaps — you meet the year-{year} target in every area this role relies on.")
+        else:
+            st.caption(f"You vs what's reasonable for year {year} ({expect * 100:.0f}% of the role's ideal), "
+                       "biggest gap first.")
+            st.plotly_chart(gap_figure(e.gaps, year), width="stretch", config=PLOT_CFG, key=f"gap_{t_idx}")
 
         ns = e.next_steps
         st.markdown(f"#### 🚀 Next steps — {ns.stage_title}")

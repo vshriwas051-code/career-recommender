@@ -67,3 +67,9 @@ def test_prediction_history_is_appended(db_path):
     assert hist[0]["top_roles"][0]["role"] == pred.top[0].role
     assert set(hist[0]["top_roles"][0]) == {"role", "match", "confidence", "raw_probability"}
     assert hist[0]["model_version"] == pred.model_version != ""
+
+
+def test_format_confidence_never_shows_zero():
+    from career.predict import format_confidence
+    assert format_confidence(0.0) == "<1%" and format_confidence(0.004) == "<1%"
+    assert format_confidence(0.081) == "8%" and format_confidence(0.9) == "90%"
